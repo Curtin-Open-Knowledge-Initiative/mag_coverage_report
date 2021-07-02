@@ -22,6 +22,7 @@
 
 doi_table_types = """
 SELECT 
+    crossref.published_year,
     mag.Doctype as mag_doctype,
     crossref.type as cr_type,
     count(doi) as total_count,
@@ -29,8 +30,8 @@ SELECT
 
 FROM `academic-observatory.observatory.doi20210605`
 
-GROUP BY mag_doctype, cr_type
-ORDER BY total_count DESC
+GROUP BY crossref.published_year, mag_doctype, cr_type
+ORDER BY crossref,published_year DESC, total_count DESC
 """
 
 mag_table_types = """
@@ -45,13 +46,14 @@ SELECT
 FROM `academic-observatory.mag.Papers20210510` 
 )
 
-SELECT 
+SELECT
+    Year, 
     Doctype,
     has_doi,
     count(PaperId) as count,
     countif(Doi IS NOT NULL) as count_doi
 FROM table
-GROUP BY Doctype, has_doi
+GROUP BY Year, Doctype, has_doi
 ORDER BY count DESC
 """
 
@@ -385,34 +387,34 @@ ORDER BY Year DESC, DocType ASC, field ASC
 
 mag_table_categories_aggregation = """
 SELECT
-
----DocType,
----field,
-
-sum(num_dois) as dois,
-sum(dois_with_affiliation_ids) as dois_aff_id,
-sum(dois_with_grids) as dois_grids,
-sum(dois_with_affiliation_strings) as dois_aff_strings,
-sum(CASE WHEN field IS NOT NULL THEN num_dois END) as dois_subject,
-sum(dois_with_citations) as dois_citations,
-sum(dois_with_references) as dois_references,
-
-sum(num_objects) - sum(num_dois) as non_dois,
-sum(objects_with_affiliation_ids) - sum(dois_with_affiliation_ids) as non_dois_aff_id,
-sum(objects_with_grids)  - sum(dois_with_grids) as non_dois_grids,
-sum(objects_with_affiliation_strings) - sum(dois_with_affiliation_strings) as non_dois_aff_strings,
-sum(CASE WHEN field IS NOT NULL THEN num_objects END) - sum(CASE WHEN field IS NOT NULL THEN num_dois END) as non_dois_subject,
-sum(objects_with_citations) - sum(dois_with_citations) as non_dois_citations,
-sum(objects_with_references) - sum(dois_with_references) as non_dois_references,
-
+    Year,
+    DocType,
+    field,
+    
+    sum(num_dois) as dois,
+    sum(dois_with_affiliation_ids) as dois_aff_id,
+    sum(dois_with_grids) as dois_grids,
+    sum(dois_with_affiliation_strings) as dois_aff_strings,
+    sum(CASE WHEN field IS NOT NULL THEN num_dois END) as dois_subject,
+    sum(dois_with_citations) as dois_citations,
+    sum(dois_with_references) as dois_references,
+    
+    sum(num_objects) - sum(num_dois) as non_dois,
+    sum(objects_with_affiliation_ids) - sum(dois_with_affiliation_ids) as non_dois_aff_id,
+    sum(objects_with_grids)  - sum(dois_with_grids) as non_dois_grids,
+    sum(objects_with_affiliation_strings) - sum(dois_with_affiliation_strings) as non_dois_aff_strings,
+    sum(CASE WHEN field IS NOT NULL THEN num_objects END) - sum(CASE WHEN field IS NOT NULL THEN num_dois END) as non_dois_subject,
+    sum(objects_with_citations) - sum(dois_with_citations) as non_dois_citations,
+    sum(objects_with_references) - sum(dois_with_references) as non_dois_references,
 
 FROM `utrecht-university.MAG.mag_category_queries_result`
 ---WHERE
 ---Year IN (2019, 2020, 2021)
 
----GROUP BY
----DocType,
----field
+GROUP BY
+    DocType,
+    field,
+    Year
 
----ORDER BY dois DESC
+ORDER BY Year DESC, DocType, field
 """

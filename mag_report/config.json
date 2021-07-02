@@ -1,0 +1,21 @@
+{
+  "cache_bucket_name": "oaspa_talk_cache",
+  "output_bucket_name": "oaspa_talk_files",
+  "logfile": "logs/precipy.log",
+  "loglevel": "DEBUG",
+  "constants": {
+    "PROJECT_ID": 'utrecht_university',
+    "YEAR_RANGE": [1980,2026]
+  },
+  "ranges": {
+  },
+  "analytics": [
+    ]
+  "templates": [
+    "report_template.md"
+  ],
+  "filters": [
+    ["markdown", "html"],
+    ["xhtml2pdf", "pdf"]
+  ]
+}
