@@ -17,6 +17,9 @@
 # Authors: Cameron Neylon, Bianca Kramer
 
 import pandas as pd
+from typing import Optional
+import plotly.express as px
+import plotly.graph_objects as go
 from precipy.analytics_function import AnalyticsFunction
 from report_data_processing.sql import *
 
@@ -47,4 +50,36 @@ def get_mag_table_data(af: AnalyticsFunction):
         store['mag_categories'] = mag_categories
 
     af.add_existing_file('mag_table_data_store.hd5')
+
+
+def load_cache_data(af: AnalyticsFunction,
+                    function_name: Union[str, Callable],
+                    element: str,
+                    filename: Optional[str]=None):
+    """Convenience function for loading preprepared DataFrames from the cache
+
+    :param function_name:
+    :param element: Component of the filecache to load
+    :param af
+
+    Downloaded query data is collected as DataFrames and stored in and HDFS store as DataFrames. This
+    is a convenient function for reloading data from that frame. TODO The contents of the store should
+    also be collected in a defined metadata element stored in the Analytics Function.
+    """
+
+    if callable(function_name):
+        afunction_name = function_name.__name__
+    else:
+        afunction_name = function_name
+
+    store_filepath = af.path_to_cached_file(
+        filename, afunction_name)
+
+    with pd.HDFStore(store_filepath) as store:
+        if f"/{element}" not in store.keys():
+            return None
+        df = store[element]
+
+    return df
+
 
