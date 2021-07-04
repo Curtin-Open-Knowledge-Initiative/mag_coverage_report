@@ -1,7 +1,8 @@
 WITH truth_table AS (
     SELECT
         doi,
-        crossref.type,
+        crossref.type as cr_type,
+        mag.DocType as mag_type,
         crossref.published_year,
         CASE
             WHEN mag.PaperId is not Null THEN TRUE
@@ -163,7 +164,8 @@ WITH truth_table AS (
 
 SELECT
     published_year,
-    type,
+    cr_type,
+    mag_type,
     COUNT(doi) as num_dois,
     COUNTIF(has_mag_id) as dois_with_mag_id,
 
@@ -204,5 +206,5 @@ SELECT
 
 FROM truth_table
 
-GROUP BY published_year, type
+GROUP BY published_year, cr_type, mag_type
 ORDER BY published_year DESC, type ASC
