@@ -1,4 +1,4 @@
-WITH truth_table_update AS (
+WITH truth_table AS (
     SELECT
         doi,
         crossref.type,
@@ -202,7 +202,7 @@ SELECT
     COUNTIF(num_mag_field0 is not null) as dois_with_mag_field0,
     COUNTIF(has_mag_field0_not_cr_subject) as dois_with_mag_field_not_cr_subject
 
-FROM truth_table_update
+FROM truth_table
 
 GROUP BY published_year, type
 ORDER BY published_year DESC, type ASC
