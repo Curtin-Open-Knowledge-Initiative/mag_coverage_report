@@ -10,7 +10,17 @@
   "ranges": {
   },
   "analytics": [
+    [
+      "get_doi_table_data",
+      {
+      }
+    ],
+    [
+      "get_mag_table_data",
+      {
+      }
     ]
+  ],
   "templates": [
     "report_template.md"
   ],

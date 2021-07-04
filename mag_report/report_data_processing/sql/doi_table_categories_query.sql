@@ -8,7 +8,7 @@ WITH truth_table AS (
             WHEN mag.PaperId is not Null THEN TRUE
             ELSE FALSE
         END
-        as has_mag_id
+        as has_mag_id,
         CASE
             WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) > 0 THEN TRUE
             ELSE FALSE
@@ -207,4 +207,4 @@ SELECT
 FROM truth_table
 
 GROUP BY published_year, cr_type, mag_type
-ORDER BY published_year DESC, type ASC
+ORDER BY published_year DESC, cr_type ASC, mag_type ASC
