@@ -1,4 +1,27 @@
-WITH truth_table AS (
+WITH doi_prefixes AS (
+
+SELECT
+  member_id as cr_member,
+  prefix as cr_prefix,
+  reference_visibility as cr_ref_visibility
+
+FROM `utrecht-university.crossref_lookup.crossref_member_prefixes_20210618`
+),
+
+doi_table AS (
+
+SELECT *
+
+FROM `academic-observatory.observatory.doi20210619` as a
+
+LEFT JOIN doi_prefixes as b
+
+ON a.crossref.member = b.cr_member
+AND a.crossref.prefix = b.cr_prefix
+),
+
+
+truth_table AS (
     SELECT
         doi,
         crossref.type as cr_type,
@@ -131,6 +154,18 @@ WITH truth_table AS (
             ELSE "FALSE"
         END
         as mag_vs_cr_references,
+        CASE
+            WHEN (crossref.references_count > 0) and (cr_ref_visibility = 'open') THEN TRUE
+            ELSE FALSE
+        END
+        as has_cr_open_references,
+    
+        CASE
+            WHEN (crossref.references_count = 0) and (mag.ReferenceCount > 0) THEN TRUE
+            WHEN (crossref.references_count > 0) and (cr_ref_visibility != 'open') and (mag.ReferenceCount > 0) THEN TRUE
+            ELSE FALSE
+        END
+        as has_mag_no_cr_open_references,
 
         CASE
             WHEN ARRAY_LENGTH(crossref.subject) > 0 THEN crossref.subject[OFFSET(0)]
@@ -159,7 +194,7 @@ WITH truth_table AS (
         END as
         has_mag_field0_not_cr_subject,
 
-    FROM `academic-observatory.observatory.doi20210619`
+    FROM doi_table
 )
 
 SELECT
@@ -199,6 +234,9 @@ SELECT
     COUNTIF(mag_vs_cr_references = "EQUAL") as dois_same_mag_cr_references,
     COUNTIF(mag_vs_cr_references = "MORE_CR") as dois_more_cr_references,
     COUNTIF(mag_vs_cr_references = "MORE_MAG") as dois_more_mag_references,
+    
+    COUNTIF(has_cr_open_references) as dois_with_cr_open_references,
+    COUNTIF(has_mag_no_cr_open_references) as dois_with_mag_not_cr_open_references,
 
     COUNTIF(num_cr_subjects is not null) as dois_with_cr_subjects,
     COUNTIF(num_mag_field0 is not null) as dois_with_mag_field0,
