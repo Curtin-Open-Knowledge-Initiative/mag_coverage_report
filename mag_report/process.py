@@ -22,9 +22,11 @@ import numpy as np
 from typing import Optional, Callable
 import plotly.express as px
 import plotly.graph_objects as go
+
 from observatory.reports import report_utils
 from precipy.analytics_function import AnalyticsFunction
 from report_data_processing.sql import *
+from report_graphs.alluvial import Alluvial
 
 PROJECT_ID = 'utrecht-university'
 MAG_DATA_FILENAME = 'mag_table_data_store.hd5'
@@ -237,3 +239,37 @@ def collate_value_add_values(df: pd.DataFrame,
         df[f'pc_{col}'] = np.round(df[col] / df['num_dois'] * 100, 1)
 
     return df
+
+def alluvial_graph(af: AnalyticsFunction):
+    cr_data = load_cache_data(af,
+                              function_name=get_doi_table_data,
+                              element='doi_categories',
+                              filename=CR_DATA_FILENAME)
+
+    figdata = cr_data.groupby[['cr_type', 'mag_type']].agg(
+        num_dois = pd.NamedAgg(column='num_dois', aggfunc='sum')
+    )
+    figdata.reset_index(inplace=True)
+    plot = Alluvial(df=figdata,
+                    from_col_name='cr_type',
+                    to_col_name='mag_type',
+                    flow_values_col='num_dois')
+
+    plot.process_data()
+    fig = plot.plotly()
+    img = fig.write_image('alluvial_all_time.png')
+    af.add_existing_file('alluvial_all_time.png')
+
+    figdata = cr_data[cr_data.published_year.isin(CURRENT)].groupby[['cr_type', 'mag_type']].agg(
+        num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum')
+    )
+    figdata.reset_index(inplace=True)
+    plot = Alluvial(df=figdata,
+                    from_col_name='cr_type',
+                    to_col_name='mag_type',
+                    flow_values_col='num_dois')
+
+    plot.process_data()
+    fig = plot.plotly()
+    img = fig.write_image('alluvial_current.png')
+    af.add_existing_file('alluvial_current.png')
