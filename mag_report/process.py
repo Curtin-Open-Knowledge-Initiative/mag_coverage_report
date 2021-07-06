@@ -129,6 +129,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
             'dois_with_cr_subjects',
             'dois_with_cr_citations',
             'dois_with_cr_references',
+            'dois_with_cr_open_references',
             'dois_mag_aff_string_but_not_cr',
             'dois_with_mag_author_id_but_not_cr_orcid',
             'dois_with_mag_not_cr_abstract',
@@ -136,7 +137,8 @@ def value_add_tables_graphs(af: AnalyticsFunction):
             'dois_with_mag_not_cr_citations',
             'dois_more_mag_citations',
             'dois_with_mag_not_cr_references',
-            'dois_more_mag_references'
+            'dois_more_mag_references',
+            'dois_with_mag_not_cr_open_references'
             ]
 
     summary_table = collate_value_add_values(sum_all, cols)
@@ -153,13 +155,15 @@ def value_add_tables_graphs(af: AnalyticsFunction):
                           'CR Subject (%)',
                           'CR Citations to (%)',
                           'CR References from (%)',
+                          'CR Open References (%)'
                           'MAG Added Affiliation String (%)',
                           'MAG Added Author ID (%)',
                           'MAG Added Abstract (%)',
                           'MAG Added Citations (%)',
                           'MAG Higher Citation Count (%)',
                           'MAG Added References (%)',
-                          'MAG Higher Reference Count (%)']
+                          'MAG Higher Reference Count (%)',
+                          'MAG Added to Open References (%)']
 
     summary_value_add_table = report_utils.generate_table_data('Metadata Coverage and MAG Value Add for Crossref DOIs',
                                                                summary_table,
@@ -215,7 +219,6 @@ def value_add_tables_graphs(af: AnalyticsFunction):
 
     for f in af.generate_file('summary_doi_metadata_coverage_by_type_current.json'):
         json.dump(summary_value_add_table, f)
-
 
 
 def collate_value_add_values(df: pd.DataFrame,
