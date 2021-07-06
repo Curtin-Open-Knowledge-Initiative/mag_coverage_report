@@ -111,8 +111,6 @@ def mag_coverage_table(af: AnalyticsFunction):
     for f in af.generate_file('mag_coverage_table.json'):
         json.dump(mag_coverage_table, f)
 
-    return 'outputs_table.json'
-
 
 def value_add_tables_graphs(af: AnalyticsFunction):
     cr_data = load_cache_data(af,

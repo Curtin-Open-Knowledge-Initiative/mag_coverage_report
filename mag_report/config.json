@@ -20,6 +20,22 @@
       {
       }
     ]
+    ,
+    [
+      "mag_coverage_table",
+      {
+      }
+    ],
+    [
+      "value_add_tables_graphs",
+      {
+      }
+    ],
+    [
+      "alluvial_graph",
+      {
+      }
+    ]
   ],
   "templates": [
     "report_template.md"
