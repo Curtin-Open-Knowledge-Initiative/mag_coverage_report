@@ -112,7 +112,7 @@ def mag_coverage_table(af: AnalyticsFunction):
     return 'outputs_table.json'
 
 
-def value_add_tables(af: AnalyticsFunction):
+def value_add_tables_graphs(af: AnalyticsFunction):
     cr_data = load_cache_data(af,
                               function_name=get_doi_table_data,
                               element='doi_categories',
@@ -122,49 +122,6 @@ def value_add_tables(af: AnalyticsFunction):
     sum_2020 = cr_data[cr_data.published_year == 2020].sum(axis=0)
     sum_current = cr_data[cr_data.published_year.isin(CURRENT)].sum(axis=0)
     sum_lastdecade = cr_data[cr_data.published_year.isin(LAST_DECADE)].sum(axis=0)
-
-    summary_table = collate_value_add_values(sum_all)
-    summary_table.append(collate_value_add_values(sum_current))
-    summary_table.append(collate_value_add_values(sum_2020))
-
-    summary_table['Time Period'] = ['All Time',
-                                    'Crossref "Current" (2019-21)',
-                                    '2020 Only']
-
-    short_column_names = ['Time Period',
-                          'Total DOIs',
-                          'CR Affiliation (%)',
-                          'CR Abstract (%)',
-                          'CR Subject (%)',
-                          'CR Citations to (%)',
-                          'CR References from (%)',
-                          'MAG Added Affiliation String (%)',
-                          'MAG Added Author ID (%)',
-                          'MAG Added Abstract (%)',
-                          'MAG Added Citations (%)',
-                          'MAG Higher Citation Count (%)',
-                          'MAG Added References (%)',
-                          'MAG Higher Reference Count (%)']
-
-    summary_value_add_table = report_utils.generate_table_data('Metadata Coverage and MAG Value Add for Crossref DOIs',
-                                                               summary_table,
-                                                               columns=summary_table.columns,
-                                                               short_column_names=short_column_names,
-                                                               identifier_column=None,
-                                                               sort_column=None)
-
-    for f in af.generate_file('summary_doi_metadata.json'):
-        json.dump(summary_value_add_table, f)
-
-    return 'summary_doi_metadata.json'
-
-
-def collate_value_add_values(df: pd.DataFrame):
-    """
-    Convenience function for cleaning up the value add tables
-    :param df: summed data frame from the doi_table_categories_query
-    :return: row for the table
-    """
 
     cols = ['dois_with_cr_affiliation_strings',
             'dois_with_cr_orcid',
@@ -182,10 +139,98 @@ def collate_value_add_values(df: pd.DataFrame):
             'dois_more_mag_references'
             ]
 
+    summary_table = collate_value_add_values(sum_all, cols)
+    summary_table.append(collate_value_add_values(sum_current, cols))
+    summary_table.append(collate_value_add_values(sum_2020, cols))
+
+    summary_table['Time Period'] = ['All Time',
+                                    'Crossref "Current" (2019-21)',
+                                    '2020 Only']
+
+    short_column_names = ['Total DOIs',
+                          'CR Affiliation (%)',
+                          'CR Abstract (%)',
+                          'CR Subject (%)',
+                          'CR Citations to (%)',
+                          'CR References from (%)',
+                          'MAG Added Affiliation String (%)',
+                          'MAG Added Author ID (%)',
+                          'MAG Added Abstract (%)',
+                          'MAG Added Citations (%)',
+                          'MAG Higher Citation Count (%)',
+                          'MAG Added References (%)',
+                          'MAG Higher Reference Count (%)']
+
+    summary_value_add_table = report_utils.generate_table_data('Metadata Coverage and MAG Value Add for Crossref DOIs',
+                                                               summary_table,
+                                                               columns=['Time Period'] + [f'pc_{col}' for col in cols],
+                                                               short_column_names=['Time Period'] + short_column_names,
+                                                               identifier_column=None,
+                                                               sort_column=None)
+
+    for f in af.generate_file('summary_doi_metadata_coverage.json'):
+        json.dump(summary_value_add_table, f)
+
+    sum_by_type = cr_data.groupby('cr_type').sum().reset_index()
+    summary_table = collate_value_add_values(sum_by_type)
+
+    summary_value_add_table = report_utils.generate_table_data(
+        'Metadata Coverage and MAG Value Add by Crossref Type - All Time',
+        summary_table,
+        columns=['cr_type'] + [f'pc_{col}' for col in cols],
+        short_column_names=['Crossref Type'] + short_column_names,
+        identifier_column=None,
+        sort_column='Total DOIs',
+        sort_ascending=False)
+
+    for f in af.generate_file('summary_doi_metadata_coverage_by_type_alltime.json'):
+        json.dump(summary_value_add_table, f)
+
+    sum_2020_by_type = cr_data[cr_data.published_year == 2020].groupby('cr_type').sum().reset_index()
+    summary_table = collate_value_add_values(sum_2020_by_type)
+
+    summary_value_add_table = report_utils.generate_table_data(
+        'Metadata Coverage and MAG Value Add by Crossref Type - 2020 Publications',
+        summary_table,
+        columns=['cr_type'] + [f'pc_{col}' for col in cols],
+        short_column_names=['Crossref Type'] + short_column_names,
+        identifier_column=None,
+        sort_column='Total DOIs',
+        sort_ascending=False)
+
+    for f in af.generate_file('summary_doi_metadata_coverage_by_type_2020.json'):
+        json.dump(summary_value_add_table, f)
+
+    sum_current_by_type = cr_data[cr_data.published_year.isin(CURRENT)].groupby('cr_type').sum().reset_index()
+    summary_table = collate_value_add_values(sum_current_by_type)
+
+    summary_value_add_table = report_utils.generate_table_data(
+        'Metadata Coverage and MAG Value Add by Crossref Type - Current Period',
+        summary_table,
+        columns=['cr_type'] + [f'pc_{col}' for col in cols],
+        short_column_names=['Crossref Type'] + short_column_names,
+        identifier_column=None,
+        sort_column='Total DOIs',
+        sort_ascending=False)
+
+    for f in af.generate_file('summary_doi_metadata_coverage_by_type_current.json'):
+        json.dump(summary_value_add_table, f)
+
+
+
+def collate_value_add_values(df: pd.DataFrame,
+                             cols: list):
+    """
+    Convenience function for cleaning up the value add tables
+    :param df: summed data frame from the doi_table_categories_query
+    :param cols: type: list set of columns to calculate percentages for
+    :return df: type: pd.DataFrame modified dataframe with percentages calculated and all columns remaining
+    """
+
     if 'num_dois' not in df.columns:
         df = df.transpose()
 
     for col in cols:
         df[f'pc_{col}'] = np.round(df[col] / df['num_dois'] * 100, 1)
 
-    return df[['num_dois'] + cols]
+    return df
