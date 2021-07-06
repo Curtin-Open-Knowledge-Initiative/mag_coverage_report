@@ -45,13 +45,6 @@ def load_sql_to_string(filepath: Union[str, Path],
 
     return sql_string
 
-
-doi_table_types = load_sql_to_string("doi_table_types.sql",
-                                     directory=SQL_DIRECTORY)
-
-mag_table_types = load_sql_to_string("mag_table_types.sql",
-                                     directory=SQL_DIRECTORY)
-
 # Metadata Elements and MAG Added Value to Crossref
 
 doi_table_categories_query = load_sql_to_string("doi_table_categories_query.sql")
