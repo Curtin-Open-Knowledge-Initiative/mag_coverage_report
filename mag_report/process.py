@@ -142,8 +142,8 @@ def value_add_tables_graphs(af: AnalyticsFunction):
             ]
 
     summary_table = collate_value_add_values(sum_all, cols)
-    summary_table.append(collate_value_add_values(sum_current, cols))
-    summary_table.append(collate_value_add_values(sum_2020, cols))
+    summary_table = summary_table.append(collate_value_add_values(sum_current, cols))
+    summary_table = summary_table.append(collate_value_add_values(sum_2020, cols))
 
     summary_table['Time Period'] = ['All Time',
                                     'Crossref "Current" (2019-21)',
@@ -151,14 +151,16 @@ def value_add_tables_graphs(af: AnalyticsFunction):
 
     short_column_names = ['Total DOIs',
                           'CR Affiliation (%)',
+                          'CR ORCIDS (%)',
                           'CR Abstract (%)',
                           'CR Subject (%)',
                           'CR Citations to (%)',
                           'CR References from (%)',
-                          'CR Open References (%)'
+                          'CR Open References (%)',
                           'MAG Added Affiliation String (%)',
                           'MAG Added Author ID (%)',
                           'MAG Added Abstract (%)',
+                          'MAG Added Subject (%)',
                           'MAG Added Citations (%)',
                           'MAG Higher Citation Count (%)',
                           'MAG Added References (%)',
@@ -167,23 +169,23 @@ def value_add_tables_graphs(af: AnalyticsFunction):
 
     summary_value_add_table = report_utils.generate_table_data('Metadata Coverage and MAG Value Add for Crossref DOIs',
                                                                summary_table,
-                                                               columns=['Time Period'] + [f'pc_{col}' for col in cols],
+                                                               columns=['Time Period', 'num_dois'] + [f'pc_{col}' for col in cols],
                                                                short_column_names=['Time Period'] + short_column_names,
-                                                               identifier_column=None,
+                                                               identifier=None,
                                                                sort_column=None)
 
     for f in af.generate_file('summary_doi_metadata_coverage.json'):
         json.dump(summary_value_add_table, f)
 
     sum_by_type = cr_data.groupby('cr_type').sum().reset_index()
-    summary_table = collate_value_add_values(sum_by_type)
+    summary_table = collate_value_add_values(sum_by_type, cols)
 
     summary_value_add_table = report_utils.generate_table_data(
         'Metadata Coverage and MAG Value Add by Crossref Type - All Time',
         summary_table,
         columns=['cr_type'] + [f'pc_{col}' for col in cols],
         short_column_names=['Crossref Type'] + short_column_names,
-        identifier_column=None,
+        identifier=None,
         sort_column='Total DOIs',
         sort_ascending=False)
 
@@ -191,14 +193,14 @@ def value_add_tables_graphs(af: AnalyticsFunction):
         json.dump(summary_value_add_table, f)
 
     sum_2020_by_type = cr_data[cr_data.published_year == 2020].groupby('cr_type').sum().reset_index()
-    summary_table = collate_value_add_values(sum_2020_by_type)
+    summary_table = collate_value_add_values(sum_2020_by_type, cols)
 
     summary_value_add_table = report_utils.generate_table_data(
         'Metadata Coverage and MAG Value Add by Crossref Type - 2020 Publications',
         summary_table,
         columns=['cr_type'] + [f'pc_{col}' for col in cols],
         short_column_names=['Crossref Type'] + short_column_names,
-        identifier_column=None,
+        identifier=None,
         sort_column='Total DOIs',
         sort_ascending=False)
 
@@ -206,14 +208,14 @@ def value_add_tables_graphs(af: AnalyticsFunction):
         json.dump(summary_value_add_table, f)
 
     sum_current_by_type = cr_data[cr_data.published_year.isin(CURRENT)].groupby('cr_type').sum().reset_index()
-    summary_table = collate_value_add_values(sum_current_by_type)
+    summary_table = collate_value_add_values(sum_current_by_type, cols)
 
     summary_value_add_table = report_utils.generate_table_data(
         'Metadata Coverage and MAG Value Add by Crossref Type - Current Period',
         summary_table,
         columns=['cr_type'] + [f'pc_{col}' for col in cols],
         short_column_names=['Crossref Type'] + short_column_names,
-        identifier_column=None,
+        identifier=None,
         sort_column='Total DOIs',
         sort_ascending=False)
 
@@ -230,8 +232,8 @@ def collate_value_add_values(df: pd.DataFrame,
     :return df: type: pd.DataFrame modified dataframe with percentages calculated and all columns remaining
     """
 
-    if 'num_dois' not in df.columns:
-        df = df.transpose()
+    if type(df) == pd.Series:
+        df = pd.DataFrame(df).transpose()
 
     for col in cols:
         df[f'pc_{col}'] = np.round(df[col] / df['num_dois'] * 100, 1)
@@ -239,12 +241,13 @@ def collate_value_add_values(df: pd.DataFrame,
     return df
 
 def alluvial_graph(af: AnalyticsFunction):
+
     cr_data = load_cache_data(af,
                               function_name=get_doi_table_data,
                               element='doi_categories',
                               filename=CR_DATA_FILENAME)
 
-    figdata = cr_data.groupby[['cr_type', 'mag_type']].agg(
+    figdata = cr_data.groupby(['cr_type', 'mag_type']).agg(
         num_dois = pd.NamedAgg(column='num_dois', aggfunc='sum')
     )
     figdata.reset_index(inplace=True)
@@ -258,7 +261,7 @@ def alluvial_graph(af: AnalyticsFunction):
     img = fig.write_image('alluvial_all_time.png')
     af.add_existing_file('alluvial_all_time.png')
 
-    figdata = cr_data[cr_data.published_year.isin(CURRENT)].groupby[['cr_type', 'mag_type']].agg(
+    figdata = cr_data[cr_data.published_year.isin(CURRENT)].groupby(['cr_type', 'mag_type']).agg(
         num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum')
     )
     figdata.reset_index(inplace=True)

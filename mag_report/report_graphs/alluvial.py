@@ -29,6 +29,7 @@
 # labels must be unique
 
 import pandas as pd
+import numpy as np
 import plotly.graph_objects as go
 from observatory.reports.abstract_chart import AbstractObservatoryChart
 
@@ -55,7 +56,7 @@ class Alluvial(AbstractObservatoryChart):
         ordered_from_labels = from_counts.sort_values(self.flow_values, ascending=False).index.values
         ordered_to_labels = to_counts.sort_values(self.flow_values, ascending=False).index.values
 
-        self.node_labels = ordered_from_labels + ordered_to_labels
+        self.node_labels = np.append(ordered_from_labels, ordered_to_labels)
 
         self.link = {
             'source': [],
@@ -63,17 +64,17 @@ class Alluvial(AbstractObservatoryChart):
             'value': []
         }
 
-        for f in ordered_to_labels:
-            for t in ordered_from_labels:
-                vals = self.df[(self.from_col_name == f) &
-                               (self.to_col_name == t)].values
+        for f in ordered_from_labels:
+            for t in ordered_to_labels:
+                vals = self.df[(self.df[self.from_col_name] == f) &
+                               (self.df[self.to_col_name] == t)][self.flow_values].values
                 if len(vals) == 1:
                     self.link['value'].append(vals[0])
                 else:
                     continue
 
-                self.link['source'].append(self.node_labels.index(f))
-                self.link['target'].append(self.node_labels.index(t))
+                self.link['source'].append(np.where(self.node_labels == f)[0][0])
+                self.link['target'].append(np.where(self.node_labels == t)[0][0])
 
     def plotly(self, **kwargs):
 
@@ -89,3 +90,6 @@ class Alluvial(AbstractObservatoryChart):
         )])
 
         return fig
+
+    def plot(self):
+        pass

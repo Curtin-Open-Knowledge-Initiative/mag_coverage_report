@@ -1,20 +1,18 @@
 {% import "report_macros.md" as helper with context %}
 {% include "report_css.html" %}
 
-{% set mag_coverage_table = load_json(mag_coverage_table.files["mag_coverage_table.json"].cache_filepath) %}
 {% set metadata_coverage_table = load_json(value_add_tables_graphs.files["summary_doi_metadata_coverage.json"].cache_filepath) %}
 {% set metadata_coverage_alltime_table = load_json(value_add_tables_graphs.files["summary_doi_metadata_coverage_by_type_alltime.json"].cache_filepath) %}
-{% set metadata_coverage__current_table = load_json(value_add_tables_graphs.files["summary_doi_metadata_coverage_by_type_current.json"].cache_filepath) %}
-{% set metadata_coverage__2020_table = load_json(value_add_tables_graphs.files["summary_doi_metadata_coverage_by_type_2020.json"].cache_filepath) %}
+{% set metadata_coverage_current_table = load_json(value_add_tables_graphs.files["summary_doi_metadata_coverage_by_type_current.json"].cache_filepath) %}
+{% set metadata_coverage_2020_table = load_json(value_add_tables_graphs.files["summary_doi_metadata_coverage_by_type_2020.json"].cache_filepath) %}
 
 <!-- Title Page -->
 <pdf:nexttemplate name="titlepage">
 <pdf:nextpage>
 
-<p class="titleface">{{ metadata.name|upper }}</p>
-<p class="subtitle">OPEN KNOWLEDGE REPORT</p>
+<p class="subtitle">TITLE</p>
 <p class="titlemeta"><br>DATE: {{ helper.created_at()|upper }}</p>
-<p class="titlemeta">FOCUS YEAR: {{ metadata.focus_year }}</p>
+
 
 <!-- switch page templates -->
 <pdf:nexttemplate name="report">
@@ -27,7 +25,7 @@ Some text goes here
 
 # Exciting things like data and table
 
-{{ helper.tableize(mag_coverage_table, 1) }}
+
 
 ![](alluvial_current.png)
 
