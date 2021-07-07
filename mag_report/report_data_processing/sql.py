@@ -38,7 +38,7 @@ def load_sql_to_string(filepath: Union[str, Path],
     with open(filepath, 'r') as f:
         sql = f.readlines()
 
-    sql_string = "/n".join(sql)
+    sql_string = "".join(sql)
 
     if parameters:
         sql_string = sql_string.format(**parameters)
@@ -47,7 +47,8 @@ def load_sql_to_string(filepath: Union[str, Path],
 
 # Metadata Elements and MAG Added Value to Crossref
 
-doi_table_categories_query = load_sql_to_string("doi_table_categories_query.sql")
+doi_table_categories_query = load_sql_to_string("doi_table_categories_query.sql",
+                                                directory=SQL_DIRECTORY)
 
 # MAG non-DOI Metadata Quality
 mag_table_categories_query = load_sql_to_string("mag_table_categories_query.sql",

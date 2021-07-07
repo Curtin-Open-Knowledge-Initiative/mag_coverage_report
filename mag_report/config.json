@@ -4,7 +4,7 @@
   "logfile": "logs/precipy.log",
   "loglevel": "DEBUG",
   "constants": {
-    "PROJECT_ID": 'utrecht_university',
+    "PROJECT_ID": "utrecht_university",
     "YEAR_RANGE": [1980,2026]
   },
   "ranges": {
@@ -16,24 +16,15 @@
       }
     ],
     [
-      "get_mag_table_data",
-      {
-      }
-    ]
-    ,
-    [
-      "mag_coverage_table",
-      {
-      }
-    ],
-    [
       "value_add_tables_graphs",
       {
+        "depends": ["get_doi_table_data"]
       }
     ],
     [
       "alluvial_graph",
       {
+        "depends": ["get_doi_table_data"]
       }
     ]
   ],
