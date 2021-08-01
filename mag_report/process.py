@@ -20,13 +20,11 @@ import json
 import pandas as pd
 import numpy as np
 from typing import Optional, Callable
-import plotly.express as px
-import plotly.graph_objects as go
 
 from observatory.reports import report_utils
 from precipy.analytics_function import AnalyticsFunction
 from report_data_processing.sql import *
-from report_graphs.alluvial import Alluvial
+from report_graphs import Alluvial, OverallCoverage, BarLine
 
 PROJECT_ID = 'utrecht-university'
 MAG_DATA_FILENAME = 'mag_table_data_store.hd5'
@@ -169,7 +167,8 @@ def value_add_tables_graphs(af: AnalyticsFunction):
 
     summary_value_add_table = report_utils.generate_table_data('Metadata Coverage and MAG Value Add for Crossref DOIs',
                                                                summary_table,
-                                                               columns=['Time Period', 'num_dois'] + [f'pc_{col}' for col in cols],
+                                                               columns=['Time Period', 'num_dois'] + [f'pc_{col}' for
+                                                                                                      col in cols],
                                                                short_column_names=['Time Period'] + short_column_names,
                                                                identifier=None,
                                                                sort_column=None)
@@ -183,7 +182,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
     summary_value_add_table = report_utils.generate_table_data(
         'Metadata Coverage and MAG Value Add by Crossref Type - All Time',
         summary_table,
-        columns=['cr_type'] + [f'pc_{col}' for col in cols],
+        columns=['cr_type', 'num_dois'] + [f'pc_{col}' for col in cols],
         short_column_names=['Crossref Type'] + short_column_names,
         identifier=None,
         sort_column='Total DOIs',
@@ -198,7 +197,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
     summary_value_add_table = report_utils.generate_table_data(
         'Metadata Coverage and MAG Value Add by Crossref Type - 2020 Publications',
         summary_table,
-        columns=['cr_type'] + [f'pc_{col}' for col in cols],
+        columns=['cr_type', 'num_dois'] + [f'pc_{col}' for col in cols],
         short_column_names=['Crossref Type'] + short_column_names,
         identifier=None,
         sort_column='Total DOIs',
@@ -213,7 +212,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
     summary_value_add_table = report_utils.generate_table_data(
         'Metadata Coverage and MAG Value Add by Crossref Type - Current Period',
         summary_table,
-        columns=['cr_type'] + [f'pc_{col}' for col in cols],
+        columns=['cr_type', 'num_dois'] + [f'pc_{col}' for col in cols],
         short_column_names=['Crossref Type'] + short_column_names,
         identifier=None,
         sort_column='Total DOIs',
@@ -240,16 +239,26 @@ def collate_value_add_values(df: pd.DataFrame,
 
     return df
 
-def alluvial_graph(af: AnalyticsFunction):
 
+def alluvial_graph(af: AnalyticsFunction):
     cr_data = load_cache_data(af,
                               function_name=get_doi_table_data,
                               element='doi_categories',
                               filename=CR_DATA_FILENAME)
 
-    figdata = cr_data.groupby(['cr_type', 'mag_type']).agg(
-        num_dois = pd.NamedAgg(column='num_dois', aggfunc='sum')
+    cr_data_with_nulls = cr_data.replace(to_replace={'cr_type': {
+        None: 'No Assigned Crossref Type'
+    },
+        'mag_type': {
+            None: 'No Assigned MAG Type'
+        }
+    }
     )
+
+    figdata = cr_data_with_nulls.groupby(['cr_type', 'mag_type']).agg(
+        num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum')
+    )
+
     figdata.reset_index(inplace=True)
     plot = Alluvial(df=figdata,
                     from_col_name='cr_type',
@@ -258,13 +267,14 @@ def alluvial_graph(af: AnalyticsFunction):
 
     plot.process_data()
     fig = plot.plotly()
-    img = fig.write_image('alluvial_all_time.png')
+    fig.write_image('alluvial_all_time.png')
     af.add_existing_file('alluvial_all_time.png')
 
-    figdata = cr_data[cr_data.published_year.isin(CURRENT)].groupby(['cr_type', 'mag_type']).agg(
+    figdata = cr_data_with_nulls[cr_data.published_year.isin(CURRENT)].groupby(['cr_type', 'mag_type']).agg(
         num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum')
     )
     figdata.reset_index(inplace=True)
+
     plot = Alluvial(df=figdata,
                     from_col_name='cr_type',
                     to_col_name='mag_type',
@@ -274,3 +284,98 @@ def alluvial_graph(af: AnalyticsFunction):
     fig = plot.plotly()
     img = fig.write_image('alluvial_current.png')
     af.add_existing_file('alluvial_current.png')
+
+
+def calculate_overall_coverage(mag_data: pd.DataFrame,
+                               cr_data: pd.DataFrame) -> dict:
+    cr_total = cr_data.num_dois.sum()
+    cr_in_mag = cr_data.dois_with_mag_id.sum()
+    mag_total = mag_data.num_objects.sum()
+    mag_with_doi = mag_data.num_dois.sum()
+    mag_dois_not_cr = mag_with_doi - cr_in_mag
+    total_objects = cr_total + (mag_total - mag_with_doi) + mag_dois_not_cr
+    total_dois = cr_total + mag_dois_not_cr
+    objects_wo_dois = total_objects - total_dois
+
+    return dict(
+        total_objects=total_objects,
+        total_dois=total_dois,
+        objects_wo_dois=objects_wo_dois,
+        mag_no_doi=mag_total - mag_with_doi,
+        mag_dois_not_cr=mag_dois_not_cr,
+        cr_in_mag=cr_in_mag,
+        cr_not_in_mag=cr_total - cr_in_mag,
+        cr_total=cr_total
+    )
+
+
+def overall_comparison(af: AnalyticsFunction):
+    cr_data = load_cache_data(af,
+                              function_name=get_doi_table_data,
+                              element='doi_categories',
+                              filename=CR_DATA_FILENAME)
+
+    cr_sum_all = cr_data.sum(axis=0)
+    cr_sum_2020 = cr_data[cr_data.published_year == 2020].sum(axis=0)
+    cr_sum_current = cr_data[cr_data.published_year.isin(CURRENT)].sum(axis=0)
+
+    mag_data = load_cache_data(af,
+                               function_name=get_mag_table_data,
+                               element='mag_categories',
+                               filename=MAG_DATA_FILENAME)
+
+    mag_sum_all = mag_data.sum(axis=0)
+    mag_sum_2020 = mag_data[mag_data.Year == 2020].sum(axis=0)
+    mag_sum_current = mag_data[mag_data.Year.isin(CURRENT)].sum(axis=0)
+
+    figdata_all = calculate_overall_coverage(mag_sum_all, cr_sum_all)
+    chart = OverallCoverage(figdata_all,
+                            line_offset=0.08)
+    fig = chart.plotly()
+    fig.write_image('overall_coverage.png')
+    af.add_existing_file('overall_coverage.png')
+
+    figdata_2020 = calculate_overall_coverage(mag_sum_2020, cr_sum_2020)
+    chart = OverallCoverage(figdata_2020,
+                            line_offset=0.08)
+    fig = chart.plotly()
+    fig.write_image('2020_coverage.png')
+    af.add_existing_file('2020_coverage.png')
+
+    figdata_current = calculate_overall_coverage(mag_sum_current, cr_sum_current)
+    chart = OverallCoverage(figdata_current,
+                            line_offset=0.08)
+    fig = chart.plotly()
+    fig.write_image('current_coverage.png')
+    af.add_existing_file('current_coverage.png')
+
+
+def mag_in_crossref_by_pubdate(af):
+    cr_data = load_cache_data(af,
+                              function_name=get_doi_table_data,
+                              element='doi_categories',
+                              filename=CR_DATA_FILENAME)
+
+    mag_data = load_cache_data(af,
+                               function_name=get_mag_table_data,
+                               element='mag_categories',
+                               filename=MAG_DATA_FILENAME)
+
+    year_range = range(1980, 2022)
+
+    figdata = pd.DataFrame(index=year_range,
+                           data=[calculate_overall_coverage(
+                               mag_data=mag_data[mag_data.Year == year],
+                               cr_data=cr_data[cr_data.published_year == year])
+                               for year in year_range])
+
+    figdata['pc_mag_in_cr'] = figdata.cr_in_mag / figdata.cr_total * 100
+
+    chart = BarLine(xdata=figdata.index,
+                  bardata=figdata.cr_total,
+                  linedata=figdata.pc_mag_in_cr)
+
+    fig = chart.plotly()
+
+    fig.write_image('cr_in_mag_barline.png')
+    af.add_existing_file('cr_in_mag_barline.png')

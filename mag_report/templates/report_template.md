@@ -25,9 +25,30 @@ Some text goes here
 
 # Exciting things like data and table
 
+![](overall_coverage.png)
 
+Overall coverage of DOIs in MAG and Crossref metadata
+
+![](2020_coverage.png)
+
+Coverage for outputs published in 2020
+
+![](current_coverage.png)
+
+Coverage for "current" outputs (published 2019-21)
 
 ![](alluvial_current.png)
+
+Alluvial Current
+
+![](cr_in_mag_barline.png)
+
+Crossref coverage in MAG by Pubdate
+
+<!-- switch to landscape page template -->
+<pdf:nexttemplate name="landscape-report">
+
+<pdf:nextpage>
 
 {{ helper.tableize(metadata_coverage_table, 2) }}
 

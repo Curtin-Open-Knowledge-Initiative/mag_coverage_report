@@ -16,6 +16,11 @@
       }
     ],
     [
+      "get_mag_table_data",
+      {
+      }
+    ],
+    [
       "value_add_tables_graphs",
       {
         "depends": ["get_doi_table_data"]
@@ -25,6 +30,19 @@
       "alluvial_graph",
       {
         "depends": ["get_doi_table_data"]
+      }
+    ],
+    [
+      "overall_comparison",
+      {
+        "depends": ["get_doi_table_data", "get_mag_table_data"]
+      }
+    ]
+    ,
+    [
+      "mag_in_crossref_by_pubdate",
+      {
+        "depends": ["get_doi_table_data", "get_mag_table_data"]
       }
     ]
   ],

@@ -35,7 +35,12 @@ WITH truth_table AS (
         END
         as has_references,
 
-        fields.level_0[OFFSET(0)].DisplayName as field,
+        CASE
+            WHEN ARRAY_LENGTH(fields.level_0) > 0
+            THEN fields.level_0[OFFSET(0)].DisplayName
+            ELSE null
+            END
+        as field,
         ARRAY_LENGTH(fields.level_0) as num_fields,
 
         CASE
