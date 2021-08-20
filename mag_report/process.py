@@ -19,12 +19,16 @@ import json
 
 import pandas as pd
 import numpy as np
-from typing import Optional, Callable
+from typing import Optional, Callable, Union
 
 from observatory.reports import report_utils
 from precipy.analytics_function import AnalyticsFunction
-from report_data_processing.sql import *
-from report_graphs import Alluvial, OverallCoverage, BarLine
+from report_data_processing.sql import (
+    doi_table_categories_query, mag_table_categories_query
+)
+from report_graphs import (
+    Alluvial, OverallCoverage, BarLine, ValueAddBar, ValueAddByCrossrefType
+)
 
 PROJECT_ID = 'utrecht-university'
 MAG_DATA_FILENAME = 'mag_table_data_store.hd5'
@@ -144,8 +148,19 @@ def value_add_tables_graphs(af: AnalyticsFunction):
     summary_table = summary_table.append(collate_value_add_values(sum_2020, cols))
 
     summary_table['Time Period'] = ['All Time',
-                                    'Crossref "Current" (2019-21)',
+                                    'Crossref Current (2019-21)',
                                     '2020 Only']
+
+    for time_period in ['All Time',
+                        'Crossref Current (2019-21)',
+                        '2020 Only']:
+        chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
+                            categories=['Crossref', 'Microsoft Academic Adds'],
+                            xs=['Affiliations', 'Abstracts', 'Citations to', 'References from'])
+        fig = chart.plotly()
+        filename = f'value_add_{time_period.lower().replace(" ", "_")}.png'
+        fig.write_image(filename)
+        af.add_existing_file(filename)
 
     short_column_names = ['Total DOIs',
                           'CR Affiliation (%)',
@@ -178,6 +193,13 @@ def value_add_tables_graphs(af: AnalyticsFunction):
 
     sum_by_type = cr_data.groupby('cr_type').sum().reset_index()
     summary_table = collate_value_add_values(sum_by_type, cols)
+
+    chart = ValueAddByCrossrefType(df=sum_by_type,
+                                   metadata_element='Abstracts')
+    # fig = chart.plotly()
+    # fig.show()
+    # fig.write_image(f'abstracts_by_cr_type.png')
+    # af.add_existing_file('abstracts_by_cr_type.png')
 
     summary_value_add_table = report_utils.generate_table_data(
         'Metadata Coverage and MAG Value Add by Crossref Type - All Time',
@@ -372,8 +394,8 @@ def mag_in_crossref_by_pubdate(af):
     figdata['pc_mag_in_cr'] = figdata.cr_in_mag / figdata.cr_total * 100
 
     chart = BarLine(xdata=figdata.index,
-                  bardata=figdata.cr_total,
-                  linedata=figdata.pc_mag_in_cr)
+                    bardata=figdata.cr_total,
+                    linedata=figdata.pc_mag_in_cr)
 
     fig = chart.plotly()
 

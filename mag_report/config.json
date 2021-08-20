@@ -1,6 +1,6 @@
 {
-  "cache_bucket_name": "oaspa_talk_cache",
-  "output_bucket_name": "oaspa_talk_files",
+  "cache_bucket_name": "output_cache",
+  "output_bucket_name": "output_files",
   "logfile": "logs/precipy.log",
   "loglevel": "DEBUG",
   "constants": {

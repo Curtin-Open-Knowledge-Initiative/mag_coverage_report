@@ -43,6 +43,19 @@ Alluvial Current
 
 ![](cr_in_mag_barline.png)
 
+MAG Value Add All Time
+
+![](value_add_all_time.png)
+
+MAG Value Add Current
+
+![](value_add_crossref_"current"_(2019-21).png)
+
+MAG Value Add 2020
+
+![](value_add_2020_only.png)
+
+
 Crossref coverage in MAG by Pubdate
 
 <!-- switch to landscape page template -->

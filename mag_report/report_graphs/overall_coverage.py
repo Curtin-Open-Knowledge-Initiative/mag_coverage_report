@@ -103,7 +103,7 @@ class OverallCoverage(AbstractObservatoryChart):
             mode='text',
             textfont=dict(
                 color="black",
-                size=18,
+                size=14,
                 family="Arial"
             ))
         )
