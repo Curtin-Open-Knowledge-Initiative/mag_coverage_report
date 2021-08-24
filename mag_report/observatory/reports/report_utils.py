@@ -23,8 +23,6 @@ import plotly.graph_objects as go
 from pathlib import Path
 from string import Template
 
-from observatory.reports.charts.oapc_time_chart import *
-
 
 def build_html_figure(figure: go.Figure,
                       title: str,
