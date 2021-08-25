@@ -23,6 +23,8 @@ import plotly.graph_objects as go
 from pathlib import Path
 from string import Template
 
+import observatory.reports.defaults as defaults
+
 
 def build_html_figure(figure: go.Figure,
                       title: str,

@@ -194,7 +194,7 @@
 <pdf:nextpage>
 
 <p class="subtitle">TITLE</p>
-<p class="titlemeta"><br>DATE: 19 AUGUST 2021
+<p class="titlemeta"><br>DATE: 25 AUGUST 2021
 </p>
 
 
@@ -231,14 +231,31 @@ MAG Value Add All Time
 
 ![](value_add_all_time.png)
 
-MAG Value Add Current
+MAG Value Add "Current" (2019-21)
 
-![](value_add_crossref_"current"_(2019-21).png)
+![](value_add_crossref_current_2019-21.png)
 
 MAG Value Add 2020
 
 ![](value_add_2020_only.png)
 
+Value Add By Crossref Type
+
+Abstracts
+
+![](abstracts_by_cr_type.png)
+
+Affiliations
+
+![](affiliations_by_cr_type.png)
+
+Citations to
+
+![](citations_to_by_cr_type.png)
+
+References from
+
+![](references_from_by_cr_type.png)
 
 Crossref coverage in MAG by Pubdate
 
@@ -388,7 +405,7 @@ Crossref coverage in MAG by Pubdate
         
             <tr style="background-color: Gainsboro;">
                 
-                    <td text-align=center>Crossref Current (2019-21)</td>
+                    <td text-align=center>Crossref Current 2019-21</td>
                 
                     <td text-align=center>15722579</td>
                 

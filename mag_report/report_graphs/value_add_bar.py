@@ -1,7 +1,7 @@
 import plotly.graph_objects as go
 import pandas as pd
 
-from typing import Optional, Union, List#, Literal
+from typing import Optional, Union, List  # , Literal
 
 from observatory.reports.abstract_chart import AbstractObservatoryChart
 
@@ -62,7 +62,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
 
     def __init__(self,
                  df: pd.DataFrame,
-                 metadata_element: str #  Union[Literal['Abstracts'],
+                 metadata_element: str  # Union[Literal['Abstracts'],
                  #                         Literal['Affiliations'],
                  #                         Literal['Citations to'],
                  #                         Literal['References from'],
@@ -88,13 +88,19 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                 'References from': 'pc_dois_with_mag_not_cr_references'
             }
         }
-        pivot = self.df.pivot(columns='cr_type')
+        cr_types = ['journal-article',
+                    'proceedings',
+                    'book-chapter',
+                    'book',
+                    'posted-content',
+                    'report',
+                    'monograph']
         self.figdata = [
             go.Bar(name=category,
-                   x=pivot.columns,
-                   y=[pivot[cr_type,
-                            mapping.get(category).get(self.metadata_element)].values[0]
-                      for cr_type in pivot.columns])
+                   x=cr_types,
+                   y=[self.df[self.df.cr_type == t][
+                          mapping.get(category).get(self.metadata_element)].values[0]
+                      for t in cr_types])
             for category in self.categories
         ]
         self.processed_data = True
@@ -104,7 +110,6 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
 
     def plotly(self,
                **kwargs):
-
         if not self.processed_data:
             self.process_data()
 

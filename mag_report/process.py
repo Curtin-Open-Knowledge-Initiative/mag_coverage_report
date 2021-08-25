@@ -148,11 +148,11 @@ def value_add_tables_graphs(af: AnalyticsFunction):
     summary_table = summary_table.append(collate_value_add_values(sum_2020, cols))
 
     summary_table['Time Period'] = ['All Time',
-                                    'Crossref Current (2019-21)',
+                                    'Crossref Current 2019-21',
                                     '2020 Only']
 
     for time_period in ['All Time',
-                        'Crossref Current (2019-21)',
+                        'Crossref Current 2019-21',
                         '2020 Only']:
         chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
                             categories=['Crossref', 'Microsoft Academic Adds'],
@@ -194,12 +194,15 @@ def value_add_tables_graphs(af: AnalyticsFunction):
     sum_by_type = cr_data.groupby('cr_type').sum().reset_index()
     summary_table = collate_value_add_values(sum_by_type, cols)
 
-    chart = ValueAddByCrossrefType(df=sum_by_type,
-                                   metadata_element='Abstracts')
-    # fig = chart.plotly()
-    # fig.show()
-    # fig.write_image(f'abstracts_by_cr_type.png')
-    # af.add_existing_file('abstracts_by_cr_type.png')
+    for metadata_element in ['Abstracts',
+                             'Affiliations',
+                             'Citations to',
+                             'References from']:
+        chart = ValueAddByCrossrefType(df=sum_by_type,
+                                      metadata_element=metadata_element)
+        fig = chart.plotly()
+        fig.write_image(f'{metadata_element.replace(" ", "_").lower()}_by_cr_type.png')
+        af.add_existing_file(f'{metadata_element.replace(" ", "_").lower()}_by_cr_type.png')
 
     summary_value_add_table = report_utils.generate_table_data(
         'Metadata Coverage and MAG Value Add by Crossref Type - All Time',
