@@ -28,7 +28,7 @@ class ValueAddBar(AbstractObservatoryChart):
                     'Citations to': 'pc_dois_with_cr_citations',
                     'References from': 'pc_dois_with_cr_references',
                 },
-                'Microsoft Academic Adds': {
+                'MAG added value': {
                     'Affiliations': 'pc_dois_mag_aff_string_but_not_cr',
                     'Abstracts': 'pc_dois_with_mag_not_cr_abstract',
                     'Citations to': 'pc_dois_with_mag_not_cr_citations',
@@ -54,7 +54,8 @@ class ValueAddBar(AbstractObservatoryChart):
             self.process_data()
 
         fig = go.Figure(data=self.figdata)
-        fig.update_layout(barmode='stack')
+        fig.update_layout(barmode='stack', template='none')
+        fig.update_yaxes(range=[0, 100])
         return fig
 
 
@@ -70,7 +71,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                  ):
         self.df = df
         self.metadata_element = metadata_element
-        self.categories = ['Crossref', 'Microsoft Academic Adds']
+        self.categories = ['Crossref', 'MAG added value']
         self.processed_data = False
 
     def process_data(self):
@@ -81,7 +82,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                 'Citations to': 'pc_dois_with_cr_citations',
                 'References from': 'pc_dois_with_cr_references',
             },
-            'Microsoft Academic Adds': {
+            'MAG added value': {
                 'Affiliations': 'pc_dois_mag_aff_string_but_not_cr',
                 'Abstracts': 'pc_dois_with_mag_not_cr_abstract',
                 'Citations to': 'pc_dois_with_mag_not_cr_citations',
@@ -114,5 +115,6 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
             self.process_data()
 
         fig = go.Figure(data=self.figdata)
-        fig.update_layout(barmode='stack')
+        fig.update_layout(barmode='stack', template='none')
+        fig.update_yaxes(range=[0, 100])
         return fig

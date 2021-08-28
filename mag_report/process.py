@@ -155,7 +155,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
                         'Crossref Current 2019-21',
                         '2020 Only']:
         chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
-                            categories=['Crossref', 'Microsoft Academic Adds'],
+                            categories=['Crossref', 'MAG added value'],
                             xs=['Affiliations', 'Abstracts', 'Citations to', 'References from'])
         fig = chart.plotly()
         filename = f'value_add_{time_period.lower().replace(" ", "_")}.png'

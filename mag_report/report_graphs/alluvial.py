@@ -89,6 +89,9 @@ class Alluvial(AbstractObservatoryChart):
             link=self.link
         )])
 
+        # Update template
+        fig.update_layout(template='none')
+
         return fig
 
     def plot(self):

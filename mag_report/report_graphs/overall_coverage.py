@@ -108,4 +108,8 @@ class OverallCoverage(AbstractObservatoryChart):
             ))
         )
 
+        #Update layout
+        #fig.update_xaxes(visible=False)
+        fig.update_layout(template='none')
+
         return fig
