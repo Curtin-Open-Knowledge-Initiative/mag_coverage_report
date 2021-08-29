@@ -16,9 +16,11 @@
 #
 # Authors: Cameron Neylon, Bianca Kramer
 import json
+from pathlib import Path
 
 import pandas as pd
 import numpy as np
+import plotly.graph_objects as go
 from typing import Optional, Callable, Union
 
 from observatory.reports import report_utils
@@ -158,9 +160,10 @@ def value_add_tables_graphs(af: AnalyticsFunction):
                             categories=['Crossref', 'Microsoft Academic Adds'],
                             xs=['Affiliations', 'Abstracts', 'Citations to', 'References from'])
         fig = chart.plotly()
-        filename = f'value_add_{time_period.lower().replace(" ", "_")}.png'
-        fig.write_image(filename)
-        af.add_existing_file(filename)
+        filename = f'value_add_{time_period.lower().replace(" ", "_")}.'
+        fig.write_image(filename+'png')
+        af.add_existing_file(filename+'png')
+        write_plotly_div(af, fig, filename+'html')
 
     short_column_names = ['Total DOIs',
                           'CR Affiliation (%)',
@@ -201,8 +204,10 @@ def value_add_tables_graphs(af: AnalyticsFunction):
         chart = ValueAddByCrossrefType(df=sum_by_type,
                                       metadata_element=metadata_element)
         fig = chart.plotly()
-        fig.write_image(f'{metadata_element.replace(" ", "_").lower()}_by_cr_type.png')
-        af.add_existing_file(f'{metadata_element.replace(" ", "_").lower()}_by_cr_type.png')
+        filename = f'{metadata_element.replace(" ", "_").lower()}_by_cr_type.'
+        fig.write_image(filename+'png')
+        af.add_existing_file(filename+'png')
+        write_plotly_div(af, fig, filename+'html')
 
     summary_value_add_table = report_utils.generate_table_data(
         'Metadata Coverage and MAG Value Add by Crossref Type - All Time',
@@ -294,6 +299,7 @@ def alluvial_graph(af: AnalyticsFunction):
     fig = plot.plotly()
     fig.write_image('alluvial_all_time.png')
     af.add_existing_file('alluvial_all_time.png')
+    write_plotly_div(af, fig, 'alluvial_all_time.html')
 
     figdata = cr_data_with_nulls[cr_data.published_year.isin(CURRENT)].groupby(['cr_type', 'mag_type']).agg(
         num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum')
@@ -307,8 +313,9 @@ def alluvial_graph(af: AnalyticsFunction):
 
     plot.process_data()
     fig = plot.plotly()
-    img = fig.write_image('alluvial_current.png')
+    fig.write_image('alluvial_current.png')
     af.add_existing_file('alluvial_current.png')
+    write_plotly_div(af, fig, 'alluvial_current.html')
 
 
 def calculate_overall_coverage(mag_data: pd.DataFrame,
@@ -359,6 +366,7 @@ def overall_comparison(af: AnalyticsFunction):
     fig = chart.plotly()
     fig.write_image('overall_coverage.png')
     af.add_existing_file('overall_coverage.png')
+    write_plotly_div(af, fig, 'overall_coverage.html')
 
     figdata_2020 = calculate_overall_coverage(mag_sum_2020, cr_sum_2020)
     chart = OverallCoverage(figdata_2020,
@@ -373,6 +381,7 @@ def overall_comparison(af: AnalyticsFunction):
     fig = chart.plotly()
     fig.write_image('current_coverage.png')
     af.add_existing_file('current_coverage.png')
+    write_plotly_div(af, fig, 'current_coverage.html')
 
 
 def mag_in_crossref_by_pubdate(af):
@@ -404,3 +413,18 @@ def mag_in_crossref_by_pubdate(af):
 
     fig.write_image('cr_in_mag_barline.png')
     af.add_existing_file('cr_in_mag_barline.png')
+    write_plotly_div(af, fig, 'cr_in_mag_barline.html')
+
+def write_plotly_div(af: AnalyticsFunction,
+                     figure: go.Figure,
+                     filename: Union[str, Path],
+                     full_html: Optional[bool] = True,
+                     include_plotlyjs: Optional[Union[str, bool]] = True,
+                     auto_play: Optional[bool] = False):
+    h = figure.to_html(filename,
+                       full_html=full_html,
+                       include_plotlyjs=include_plotlyjs,
+                       auto_play=auto_play)
+
+    for f in af.generate_file(filename):
+        f.write(h)
