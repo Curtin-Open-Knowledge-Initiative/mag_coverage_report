@@ -137,6 +137,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
             'dois_mag_aff_string_but_not_cr',
             'dois_with_mag_author_id_but_not_cr_orcid',
             'dois_with_mag_not_cr_abstract',
+            'dois_with_mag_field0',
             'dois_with_mag_field_not_cr_subject',
             'dois_with_mag_not_cr_citations',
             'dois_more_mag_citations',
@@ -165,6 +166,15 @@ def value_add_tables_graphs(af: AnalyticsFunction):
         af.add_existing_file(filename+'png')
         write_plotly_div(af, fig, filename+'html')
 
+        chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
+                            categories=['Crossref', 'Microsoft Academic Adds'],
+                            xs=['Subjects'])
+        fig = chart.plotly()
+        filename = f'value_add_subject_{time_period.lower().replace(" ", "_")}.'
+        fig.write_image(filename + 'png')
+        af.add_existing_file(filename + 'png')
+        write_plotly_div(af, fig, filename + 'html')
+
     short_column_names = ['Total DOIs',
                           'CR Affiliation (%)',
                           'CR ORCIDS (%)',
@@ -176,6 +186,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
                           'MAG Added Affiliation String (%)',
                           'MAG Added Author ID (%)',
                           'MAG Added Abstract (%)',
+                          'MAG With Level 0 Field (%)',
                           'MAG Added Subject (%)',
                           'MAG Added Citations (%)',
                           'MAG Higher Citation Count (%)',
@@ -208,6 +219,14 @@ def value_add_tables_graphs(af: AnalyticsFunction):
         fig.write_image(filename+'png')
         af.add_existing_file(filename+'png')
         write_plotly_div(af, fig, filename+'html')
+
+    chart = ValueAddByCrossrefType(df=sum_by_type,
+                                   metadata_element='Subjects')
+    fig = chart.plotly()
+    filename = f'{metadata_element.replace(" ", "_").lower()}_by_cr_type.'
+    fig.write_image(filename + 'png')
+    af.add_existing_file(filename + 'png')
+    write_plotly_div(af, fig, filename + 'html')
 
     summary_value_add_table = report_utils.generate_table_data(
         'Metadata Coverage and MAG Value Add by Crossref Type - All Time',
