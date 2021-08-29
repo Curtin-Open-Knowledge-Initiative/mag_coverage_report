@@ -158,7 +158,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
                         'Crossref Current 2019-21',
                         '2020 Only']:
         chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
-                            categories=['Crossref', 'MAG added value'],
+                            categories=['Crossref', 'Microsoft Academic Adds'],
                             xs=['Affiliations', 'Abstracts', 'Citations to', 'References from'])
         fig = chart.plotly()
         filename = f'value_add_{time_period.lower().replace(" ", "_")}.'
@@ -168,7 +168,8 @@ def value_add_tables_graphs(af: AnalyticsFunction):
 
         chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
                             categories=['Crossref', 'Microsoft Academic Adds'],
-                            xs=['Subjects'])
+                            xs=['Subjects'],
+                            stackedbar=False)
         fig = chart.plotly()
         filename = f'value_add_subject_{time_period.lower().replace(" ", "_")}.'
         fig.write_image(filename + 'png')
@@ -213,7 +214,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
                              'Citations to',
                              'References from']:
         chart = ValueAddByCrossrefType(df=sum_by_type,
-                                      metadata_element=metadata_element)
+                                       metadata_element=metadata_element)
         fig = chart.plotly()
         filename = f'{metadata_element.replace(" ", "_").lower()}_by_cr_type.'
         fig.write_image(filename+'png')
@@ -221,9 +222,10 @@ def value_add_tables_graphs(af: AnalyticsFunction):
         write_plotly_div(af, fig, filename+'html')
 
     chart = ValueAddByCrossrefType(df=sum_by_type,
-                                   metadata_element='Subjects')
+                                   metadata_element='Subjects',
+                                   stackedbar=False)
     fig = chart.plotly()
-    filename = f'{metadata_element.replace(" ", "_").lower()}_by_cr_type.'
+    filename = 'subjects_by_cr_type.'
     fig.write_image(filename + 'png')
     af.add_existing_file(filename + 'png')
     write_plotly_div(af, fig, filename + 'html')

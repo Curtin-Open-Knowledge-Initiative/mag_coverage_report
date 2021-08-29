@@ -47,13 +47,19 @@ MAG Value Add All Time
 
 ![](value_add_all_time.png)
 
+![](value_add_subject_all_time.png)
+
 MAG Value Add "Current" (2019-21)
 
 ![](value_add_crossref_current_2019-21.png)
 
+![](value_add_subject_crossref_current_2019-21.png)
+
 MAG Value Add 2020
 
 ![](value_add_2020_only.png)
+
+![](value_add_subject_2020_only.png)
 
 Value Add By Crossref Type
 
@@ -72,6 +78,10 @@ Citations to
 References from
 
 ![](references_from_by_cr_type.png)
+
+Subjects
+
+![](subjects_by_cr_type.png)
 
 Crossref coverage in MAG by Pubdate
 
