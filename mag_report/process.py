@@ -355,21 +355,24 @@ def overall_comparison(af: AnalyticsFunction):
 
     figdata_all = calculate_overall_coverage(mag_sum_all, cr_sum_all)
     chart = OverallCoverage(figdata_all,
-                            line_offset=0.08)
+                            line_offset=0.06)
+                            #line_offset=0.08)
     fig = chart.plotly()
     fig.write_image('overall_coverage.png')
     af.add_existing_file('overall_coverage.png')
 
     figdata_2020 = calculate_overall_coverage(mag_sum_2020, cr_sum_2020)
     chart = OverallCoverage(figdata_2020,
-                            line_offset=0.08)
+                            line_offset=0.06)
+                            #line_offset=0.08)
     fig = chart.plotly()
     fig.write_image('2020_coverage.png')
     af.add_existing_file('2020_coverage.png')
 
     figdata_current = calculate_overall_coverage(mag_sum_current, cr_sum_current)
     chart = OverallCoverage(figdata_current,
-                            line_offset=0.08)
+                            line_offset=0.06)
+                            #line_offset=0.08)
     fig = chart.plotly()
     fig.write_image('current_coverage.png')
     af.add_existing_file('current_coverage.png')
