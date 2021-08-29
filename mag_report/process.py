@@ -272,10 +272,10 @@ def alluvial_graph(af: AnalyticsFunction):
                               filename=CR_DATA_FILENAME)
 
     cr_data_with_nulls = cr_data.replace(to_replace={'cr_type': {
-        None: 'No Assigned Crossref Type'
+        None: 'no assigned Crossref Type'
     },
         'mag_type': {
-            None: 'No Assigned MAG Type'
+            None: 'no assigned MAG Type'
         }
     }
     )
