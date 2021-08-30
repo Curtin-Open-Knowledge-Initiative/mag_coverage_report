@@ -11,7 +11,8 @@ class OverallCoverage(AbstractObservatoryChart):
     def __init__(self,
                  data_dict: dict,
                  line_offset: Optional = None,
-                 column_offset: float = 0.1
+                 column_offset: float = 0.06
+                 #column_offset: float = 0
                  ):
 
         self.datadict = data_dict
@@ -24,29 +25,45 @@ class OverallCoverage(AbstractObservatoryChart):
             [
                 dict(y0=0,
                      y1=self.datadict['total_dois'],
-                     line=dict(color='black'),
-                     fillcolor='rgba(100, 100, 100, 0.2)'),
+                     line=dict(width=0),
+                     fillcolor='rgba(100, 100, 100, 0.1)',),
                 dict(y0=self.datadict['total_dois'],
                      y1=self.datadict['total_objects'],
-                     line=dict(color='black'))
+                     line=dict(width=0),
+                     fillcolor='rgba(100, 100, 100, 0.05)'
+                     )
             ],
             [
                 dict(y0=0,
                      y1=self.datadict['cr_total'],
                      line=dict(color='darkgreen'),
-                     fillcolor='rgba(0, 180, 0, 0.2)',
-                     line_offset=self.line_offset
+                     fillcolor='rgba(0, 180, 0, 0.2)'#,
+                     #line_offset=self.line_offset
                      ),
                 dict(y0=self.datadict['cr_not_in_mag'],
                      y1=self.datadict['total_objects'],
                      line=dict(color='darkblue'),
-                     fillcolor='rgba(0, 0, 180, 0.2)')
+                     fillcolor='rgba(0, 0, 180, 0.2)',
+                     line_offset=self.line_offset
+                     ),
+                dict(y0=self.datadict['total_dois'],
+                     y1=self.datadict['total_objects'],
+                     line=dict(width=0),
+                     fillcolor='rgba(0, 0, 180, 0.2)',
+                     line_offset=self.line_offset
+                     )
+            ],
+            [
+                dict(y0=0,
+                     y1=self.datadict['total_objects'],
+                     line=dict(width=0),
+                     fillcolor='rgba(0, 0, 0, 0)')
             ]
         ]
 
         self.labels = dict(
             x=[
-                2, 2, *([4 + self.column_offset] * 4)
+                2, 2, *([4 + self.column_offset] * 4), *([5.2] * 4)
             ],
             y=[
                 self.columns[0][0]['y1'] / 2,
@@ -54,15 +71,28 @@ class OverallCoverage(AbstractObservatoryChart):
                 (self.columns[1][1]['y0'] - self.columns[1][0]['y0']) / 2,
                 (self.columns[1][0]['y1'] - self.columns[1][1]['y0']) / 2 + self.columns[1][1]['y0'],
                 (self.columns[0][0]['y1'] - self.columns[1][0]['y1']) / 2 + self.columns[1][0]['y1'],
+                (self.columns[1][1]['y1'] - self.columns[0][0]['y1']) / 2 + self.columns[0][0]['y1'],
+                (self.columns[1][1]['y0'] - self.columns[1][0]['y0']) / 2,
+                (self.columns[1][0]['y1'] - self.columns[1][1]['y0']) / 2 + self.columns[1][1]['y0'],
+                (self.columns[0][0]['y1'] - self.columns[1][0]['y1']) / 2 + self.columns[1][0]['y1'],
                 (self.columns[1][1]['y1'] - self.columns[0][0]['y1']) / 2 + self.columns[0][0]['y1']
             ],
             text=[
-                f"Objects with DOIs {int(self.datadict['total_dois'] / 1e6)}M",
-                f"Objects without DOIs {int(self.datadict['objects_wo_dois'] / 1e6)}M",
-                f"Crossref Only {int(self.datadict['cr_not_in_mag'] / 1e6)}M",
-                f"Crossref and MAG {int(self.datadict['cr_in_mag'] / 1e6)}M",
-                f"Non-Crossref DOIs in MAG {int(self.datadict['mag_dois_not_cr'] / 1e6)}M",
-                f"MAG Only {int(self.datadict['mag_no_doi'] / 1e6)}M"
+                f"with DOIs",# {int(self.datadict['total_dois'] / 1e6)}M",
+                f"without DOIs",# {int(self.datadict['objects_wo_dois'] / 1e6)}M",
+                f"{round((self.datadict['cr_not_in_mag'] / 1e6),1)} M",
+                f"{round((self.datadict['cr_in_mag'] / 1e6),1)} M",
+                f"{round((self.datadict['mag_dois_not_cr'] / 1e6),1)} M",
+                f"{round((self.datadict['mag_no_doi'] / 1e6),1)} M",
+                f"- Crossref only",
+                f"- Crossref and MAG",
+                f"- non-Crossref DOIs in MAG",
+                f"- MAG only"
+            ],
+            textposition=[
+                *(["middle center"] * 2),
+                *(["middle center"] * 4),
+                *(["middle right"] * 4)
             ]
         )
 
@@ -81,6 +111,7 @@ class OverallCoverage(AbstractObservatoryChart):
                          visible=False,
                          showgrid=False)
         fig.update_yaxes(range=[0, self.datadict.get('total_objects')],
+                         visible=False,
                          showgrid=False)
 
         # Add shapes
@@ -103,9 +134,12 @@ class OverallCoverage(AbstractObservatoryChart):
             mode='text',
             textfont=dict(
                 color="black",
-                size=14,
+                size=12,
                 family="Arial"
             ))
         )
+
+        #Update layout
+        fig.update_layout(template='none')
 
         return fig

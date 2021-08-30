@@ -34,18 +34,22 @@ class BarLine(AbstractObservatoryChart):
 
         fig.add_trace(go.Bar(
             x=self.xdata,
-            y=self.bardata
-        ), secondary_y=False)
+            y=self.bardata,
+            name='Crossref DOIs'
+        ), secondary_y=True)
 
         fig.add_trace(go.Scatter(
             x=self.xdata,
             y=self.linedata,
-            mode='lines'
-        ), secondary_y=True)
+            mode='lines',
+            name='DOIs in MAG (%)'
+        ), secondary_y=False)
 
-        fig.update_yaxes(title_text="Registered Crossref DOIs", secondary_y=False)
+        fig.update_yaxes(title_text="Registered Crossref DOIs", secondary_y=True)
         fig.update_yaxes(title_text="DOIs in MAG (%)",
-                         secondary_y=True,
+                         secondary_y=False,
                          range=[0,100])
+        # Update template
+        fig.update_layout(template='simple_white')
 
         return fig

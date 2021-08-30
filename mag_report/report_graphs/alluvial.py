@@ -52,7 +52,6 @@ class Alluvial(AbstractObservatoryChart):
 
         from_counts = self.df[[self.from_col_name, self.flow_values]].groupby(self.from_col_name).sum()
         to_counts = self.df[[self.to_col_name, self.flow_values]].groupby(self.to_col_name).sum()
-
         ordered_from_labels = from_counts.sort_values(self.flow_values, ascending=False).index.values
         ordered_to_labels = to_counts.sort_values(self.flow_values, ascending=False).index.values
 
@@ -61,7 +60,8 @@ class Alluvial(AbstractObservatoryChart):
         self.link = {
             'source': [],
             'target': [],
-            'value': []
+            'value': [],
+            'color':'rgba(200, 200, 200, 0.25)'
         }
 
         for f in ordered_from_labels:
@@ -82,12 +82,16 @@ class Alluvial(AbstractObservatoryChart):
             node=dict(
                 pad=15,
                 thickness=20,
-                line=dict(color="black", width=0.5),
+                line=dict(color="black", width=0.25),
                 label=self.node_labels,
-                color="blue"
+                color='rgba(31, 119, 180, 1)'
             ),
             link=self.link
         )])
+
+        # Update layout
+        #fig.update_layout(template='none')
+        fig.update_layout(font=dict(family="Arial", size = 12, color = 'black'))
 
         return fig
 

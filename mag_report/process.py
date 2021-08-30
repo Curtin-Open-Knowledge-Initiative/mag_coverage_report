@@ -158,7 +158,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
                         'Crossref Current 2019-21',
                         '2020 Only']:
         chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
-                            categories=['Crossref', 'Microsoft Academic Adds'],
+                            categories=['Crossref', 'MAG added value'],
                             xs=['Affiliations', 'Abstracts', 'Citations to', 'References from'])
         fig = chart.plotly()
         filename = f'value_add_{time_period.lower().replace(" ", "_")}.'
@@ -296,10 +296,10 @@ def alluvial_graph(af: AnalyticsFunction):
                               filename=CR_DATA_FILENAME)
 
     cr_data_with_nulls = cr_data.replace(to_replace={'cr_type': {
-        None: 'No Assigned Crossref Type'
+        None: 'no assigned Crossref Type'
     },
         'mag_type': {
-            None: 'No Assigned MAG Type'
+            None: 'no assigned MAG Type'
         }
     }
     )
@@ -381,7 +381,8 @@ def overall_comparison(af: AnalyticsFunction):
 
     figdata_all = calculate_overall_coverage(mag_sum_all, cr_sum_all)
     chart = OverallCoverage(figdata_all,
-                            line_offset=0.08)
+                            line_offset=0.06)
+                            #line_offset=0.08)
     fig = chart.plotly()
     fig.write_image('overall_coverage.png')
     af.add_existing_file('overall_coverage.png')
@@ -389,14 +390,16 @@ def overall_comparison(af: AnalyticsFunction):
 
     figdata_2020 = calculate_overall_coverage(mag_sum_2020, cr_sum_2020)
     chart = OverallCoverage(figdata_2020,
-                            line_offset=0.08)
+                            line_offset=0.06)
+                            #line_offset=0.08)
     fig = chart.plotly()
     fig.write_image('2020_coverage.png')
     af.add_existing_file('2020_coverage.png')
 
     figdata_current = calculate_overall_coverage(mag_sum_current, cr_sum_current)
     chart = OverallCoverage(figdata_current,
-                            line_offset=0.08)
+                            line_offset=0.06)
+                            #line_offset=0.08)
     fig = chart.plotly()
     fig.write_image('current_coverage.png')
     af.add_existing_file('current_coverage.png')
