@@ -167,7 +167,7 @@ def value_add_tables_graphs(af: AnalyticsFunction):
         write_plotly_div(af, fig, filename+'html')
 
         chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
-                            categories=['Crossref', 'Microsoft added value'],
+                            categories=['Crossref', 'MAG added value'],
                             xs=['Subjects'],
                             stackedbar=False)
         fig = chart.plotly()
@@ -310,7 +310,18 @@ def alluvial_graph(af: AnalyticsFunction):
         num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum')
     )
 
+    cr_order = ['journal-article', 'book-chapter', 'proceedings-article', 'dataset',
+                'book', 'journal-issue', 'reference-entry', 'posted-content', 'report',
+                'monograph', 'component', 'proceedings', 'report-series', 'book-section',
+                'book-part', 'standard', 'book-track', 'other', 'no assigned Crossref Type']
+    mag_order = ['Journal', 'BookChapter', 'Conference', 'Repository', 'Book', 'Patent',
+                 'Thesis', 'Dataset', 'no assigned MAG Type']
+
     figdata.reset_index(inplace=True)
+    figdata['cr_type'] = pd.Categorical(figdata.cr_type, categories=cr_order)
+    figdata['mag_type'] = pd.Categorical(figdata.mag_type, categories=mag_order)
+    figdata.sort_values(['cr_type', 'mag_type'], inplace=True)
+
     plot = Alluvial(df=figdata,
                     from_col_name='cr_type',
                     to_col_name='mag_type',
@@ -326,6 +337,9 @@ def alluvial_graph(af: AnalyticsFunction):
         num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum')
     )
     figdata.reset_index(inplace=True)
+    figdata['cr_type'] = pd.Categorical(figdata.cr_type, categories=cr_order)
+    figdata['mag_type'] = pd.Categorical(figdata.mag_type, categories=mag_order)
+    figdata.sort_values(['cr_type', 'mag_type'], inplace=True)
 
     plot = Alluvial(df=figdata,
                     from_col_name='cr_type',

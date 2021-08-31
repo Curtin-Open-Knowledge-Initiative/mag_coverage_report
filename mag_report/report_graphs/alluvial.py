@@ -52,8 +52,8 @@ class Alluvial(AbstractObservatoryChart):
 
         from_counts = self.df[[self.from_col_name, self.flow_values]].groupby(self.from_col_name).sum()
         to_counts = self.df[[self.to_col_name, self.flow_values]].groupby(self.to_col_name).sum()
-        ordered_from_labels = from_counts.sort_values(self.flow_values, ascending=False).index.values
-        ordered_to_labels = to_counts.sort_values(self.flow_values, ascending=False).index.values
+        ordered_from_labels = from_counts.index.values
+        ordered_to_labels = to_counts.index.values
 
         self.node_labels = np.append(ordered_from_labels, ordered_to_labels)
 
