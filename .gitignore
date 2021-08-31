@@ -1,4 +1,5 @@
 /.idea/
+/mag_report/logs/precipy.log
 /mag_report/node_modules/
 /mag_report/2020_coverage.png
 /mag_report/abstracts_by_cr_type.png
@@ -19,3 +20,4 @@
 /mag_report/value_add_subject_all_time.png
 /mag_report/value_add_subject_crossref_current_2019-21.png
 /mag_report/output_files/.precipy
+/mag_report/subjects_by_cr_type.png

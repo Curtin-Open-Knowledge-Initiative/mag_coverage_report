@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>A Tale of Two Societies</title>
+    <title>What do we lose when MAG goes away?</title>
     <link rel="stylesheet" href="dist/reveal.css">
     <link rel="stylesheet" href="dist/theme/coki.css">
 </head>
@@ -13,8 +13,8 @@
         <section>
             <section class="titleslide" data-background="static_assets/background-title.png">
                 <div vertical-align="middle">
-                    <h1>A Tale of Two Societies</h1>
-                    <h2>Are UK and US Chemistry Publishing <br>Diverging on Open Access?</h2>
+                    <h1>What do we lose when MAG goes away?</h1>
+                    <h2>What we have, what we need,<br> and how to preserve it</h2>
                 </div>
             </section>
             <section class="twocolumn" data-background="static_assets/background-general.png">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="rightside">
                     <ul>
-                        <li>Code and data on Github: <a href="https://github.
+                        <li>Code and data on Github: ##CHANGE THIS## <a href="https://github.
 com/Curtin-Open-Knowledge-Initiative/presentation-acs2021/">https://github.
 com/Curtin-Open-Knowledge-Initiative/presentation-acs2021/</a></li>
                         <li>Presentation on Github: <a href="https://curtin-open-knowledge-initiative.github.
@@ -43,24 +43,55 @@ io/presentation-acs2021/">https://curtin-open-knowledge-initiative.github.io/pre
             </section>
         </section>
         <section class="sectiondivider" data-background="static_assets/background-section.png">
-            <h1>Two societies</h1>
-            <h2>...both alike in dignity</h2>
+            <h1>What is the issue here?</h1>
         </section>
         <section class="bigblacktext" data-background="static_assets/background-general.png">
-            <h1>In FAIR[?] chemistry where we lay our scene</h1>
+            <h1>[Microsoft Academic Graph]...will be supported until the end of calendar year 2021,
+                upon which time MAS will be retired</h1>
+        </section>
+        <section class="twocolumn" data-background="static_assets/background-general.png">
+            <div class="leftside">
+                <h1>Good News and Bad News</h1>
+            </div>
+            <div class="rightside">
+                <ul>
+                    <li>
+                        Microsoft made the data available under an open license which offers
+                        opportunities to develop new tools and resources, particularly based
+                        on machine learning approaches.
+                    </li>
+                    <li>
+                        Much of the technology is open source and can be adapted or rebuilt to
+                        provide a replacement. Several groups are working on this.
+                    </li>
+                    <li>
+                        Some aspects of what made MAG so useful were dependent on licenses to
+                        content that will be difficult or impossible to renegotiate. Some elements
+                        of the workflows are dependent on the Bing infrastructure.
+                    </li>
+                    <li>
+                        A replacement will need to work smarter in some ways, especially if we
+                        want to reach beyond the core of the academic record (e.g. beyond DOIs)
+                    </li>
+                    <li>
+                        Structured metadata resources are also moving forward in leaps and bounds
+                        offering a complementary route to addressing data requirements.
+                    </li>
+                </ul>
+            </div>
         </section>
         <section class="bigblacktext" data-background="static_assets/background-general.png">
-            <h1>Different national policy environments on OA 2010-20</h1>
+            <h1>Can we rebuild it? Yes...but...</h1>
         </section>
         <section class="bigblacktext" data-background="static_assets/background-general.png">
-            <h1>...and different publisher responses</h1>
+            <h1>...how would we know?</h1>
         </section>
         <section class="bigblacktext" data-background="static_assets/background-general.png">
-            <img src="static_assets/timeline.png">
+            <h1>...and what do we have?</h1>
         </section>
         <section class="sectiondivider" data-background="static_assets/background-section.png">
             <h1>A quick segue on the data</h1>
-            <h2>The Curtin Open Knowledge Initiative</h2>
+            <h2>The Curtin Open Knowledge Initiative - this section needs updating</h2>
         </section>
         <section class="pullquoteorange" data-background="static_assets/background-title.png">
             <p>
@@ -106,59 +137,6 @@ io/presentation-acs2021/">https://curtin-open-knowledge-initiative.github.io/pre
                         is presented in additional slides.</p>
                 </div>
             </section>
-            <section class="twocolumn" data-background="static_assets/background-general.png">
-                <div class="leftside">
-                    <h1>Open Access Categories</h1>
-                </div>
-                <div class="rightside">
-                    <p>The following is derived from the template SQL query used to define the OA categories in
-                    Observatory Platform. For the most up to date information view the
-                        <a href="https://github.com/The-Academic-Observatory/observatory-platform/blob/develop/observatory-dags/observatory/dags/database/sql/aggregate_unpaywall.sql.jinja2">
-                            file on Github.</a></p>
-                    <h2>AGGREGATE UNPAYWALL QUERY TEMPLATE</h2>
-                    <p>This template query contains the SQL that directly interprets Unpaywall
-                    data to determine OA categories at the output level. This is therefore
-                    the canonical location for the precise definitions used for OA categories.
-                    Ideally this file should contain both the queries themselves and
-                    a description clear enough for a non-expert in SQL to understand how each
-                    category is defined.</p>
-                    <p>The current categories of Open Access described in this file are:</p>
-                    <ul>
-                        <li>is_oa: derived directly from Unpaywall</li>
-                        <li>hybrid: accessible at the publisher with a recognised license</li>
-                        <li>bronze: accessible at the publisher with no recognised license</li>
-                        <li>gold_just_doaj: an article in a journal that is in DOAJ</li>
-                        <li>gold: an article that is in a DOAJ journal OR is accessible at the publisher site with a 
-                        recognised license (hybrid)</li>
-                        <li>green: accessible at any site recognised as a repository (including preprints)</li>
-                        <li>green_only: accessible at a repository and not (in a DOAJ journal OR hybrid OR bronze)</li>
-                        <li>green_only_ignoring_bronze: accessible at a repository and not (in a DOAJ journal or 
-                        hybrid)</li>
-                    </ul>
-                </div>
-            </section>
-            <section class="twocolumn" data-background="static_assets/background-general.png">
-                <div class="leftside">
-                    <h1>Open Access Categories</h1>
-                </div>
-                <div class="rightside">
-                    <p>Levels of open access publishing are as provided by Unpaywall for all outputs with RSC and 
-ACS as publisher in Crossref metadata. In the Observatory Platform terminology this is "gold" open access and includes
-all articles published in either fully open access (as defined by indexing in DOAJ) and in mixed journals (i.e. 
-"hybrid")</p>
-                    <p>As defined in the SQL used to generate these categories.</p> 
-                    <p>Gold Open Access:</p>
-                    <p>gold OA is defined as either the journal being in DOAJ or the best_oa_location being a 
-publisher and a license being detected. This works because Unpaywall will set the publisher as the best oa location if
-it identifies an accessible publisher copy.</p>
-                    <pre><code>
-  CASE
-    WHEN journal_is_in_doaj OR (best_oa_location.host_type = "publisher" AND best_oa_location.license is not null AND not journal_is_in_doaj) THEN TRUE
-    ELSE FALSE
-  END
-    as gold,</code></pre>
-                </div>
-            </section>
         </section>
         <section class="twocolumn" data-background="static_assets/background-general.png">
             <div class="leftside">
@@ -173,66 +151,130 @@ com/embed/reporting/0b057fb6-5e07-4643-92b5-6a25138fce6d/page/Bq6OB" frameborder
             </div>
         </section>
         <section class="sectiondivider" data-background="static_assets/background-section.png">
-            <h1>What about publishers?</h1>
-            <h2>What can we tell about policy<br> and culture change?</h2>
+            <h1>Comparing MAG with Crossref Metadata</h1>
+            <h2>Who has what, and what do we lose?</h2>
         </section>
         <section class="twocolumn" data-background="static_assets/background-general.png">
                 <div class="leftside">
-                    <h1>Publisher choice in UK</h1>
+                    <h1>Added Value of MAG to Crossref</h1>
                 </div>
                 <div class="rightside">
-                    <iframe data-src="precipy/gbr_overtime.html"></iframe>
+                    <ul>
+                        <li>
+                            Additional metadata for Crossref DOIs / metadata in MAG for non-DOIs
+                        </li>
+                        <li>
+                            Metadata on:
+                            <ul>
+                                <li>Affiliations</li>
+                                <li>Abstracts</li>
+                                <li>Citations</li>
+                                <li>(Open) References</li>
+                                <li>Subjects</li>
+                            </ul>
+                        </li>
+                        <li>Split by publication type, year of publication, ##discipline##</li>
+                        <li>Across all time and for Crossref "current" (2019-21)</li>
+                        <li>This analysis on data snapshots from 18 July 2021</li>
+                    </ul>
+                </div>
+        </section>
+        <section class="twocolumn" data-background="static_assets/background-general.png">
+                <div class="leftside">
+                    <h1>MAG vs Crossref Coverage</h1>
+                </div>
+                <div class="rightside">
+                    <iframe data-src="output_files/overall_coverage.html"></iframe>
+                </div>
+        </section>
+        <section class="twocolumn" data-background="static_assets/background-general.png">
+                <div class="leftside">
+                    <h1>MAG vs Crossref Coverage (Current)</h1>
+                </div>
+                <div class="rightside">
+                    <iframe data-src="output_files/current_coverage.html"></iframe>
+                </div>
+        </section>
+        <section class="twocolumn" data-background="static_assets/background-general.png">
+                <div class="leftside">
+                    <h1>Crossref records in MAG</h1>
+                </div>
+                <div class="rightside">
+                    <iframe data-src="output_files/cr_in_mag_barline.html"></iframe>
                 </div>
         </section>
         <section class="twocolumn" 
-                 data-background="static_assets/background-general.png"
-                 data-transition="fade-in slide-out">
+                 data-background="static_assets/background-general.png">
             <div class="leftside">
-                <h1>Publisher choice in UK</h1>
+                <h1>Crossref records: publication types in Crossref and MAG</h1>
             </div>
             <div class="rightside">
-                <iframe data-src="precipy/gbr_overtime_arrows.html"></iframe>
+                <iframe data-src="output_files/alluvial_all_time.html"></iframe>
             </div>
         </section>
         <section class="twocolumn" data-background="static_assets/background-general.png">
             <div class="leftside">
-                <h1>Publisher choice by country</h1>
+                <h1>Crossref Records: MAG Added Value</h1>
             </div>
             <div class="rightside">
-                <iframe data-src="precipy/gbrusa_overtime.html"></iframe>
+                <iframe data-src="output_files/value_add_all_time.html"></iframe>
+            </div>
+        </section>
+        <section class="twocolumn" data-background="static_assets/background-general.png">
+            <div class="leftside">
+                <h1>Crossref Records: MAG Added Value (Current)</h1>
+            </div>
+            <div class="rightside">
+                <iframe data-src="output_files/value_add_crossref_current_2019-21.html"></iframe>
+            </div>
+        </section>
+        <section class="twocolumn" data-background="static_assets/background-general.png">
+            <div class="leftside">
+                <h1>Crossref Records: MAG Added Value (Subjects)</h1>
+            </div>
+            <div class="rightside">
+                <iframe data-src="output_files/value_add_subject_all_time.html"></iframe>
             </div>
         </section>
         <section class="twocolumn" data-background="static_assets/background-general.png">
                 <div class="leftside">
-                    <h1>Different patterns with OA publishing levels?</h1>
+                    <h1>MAG Added Value by Crossref Type - Affiliations</h1>
                 </div>
                 <div class="rightside">
-                    <iframe data-src="precipy/gbrusa_pc_gold_overtime.html"></iframe>
+                    <iframe data-src="output_files/affiliations_by_cr_type.html"></iframe>
                 </div>
         </section>
         <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Publisher percent of Chemistry by institution</h1>
-            </div>
-            <div class="rightside">
-                <iframe data-src="precipy/institutions_scatter_pc_chemistry.html"></iframe>
-            </div>
+                <div class="leftside">
+                    <h1>MAG Added Value by Crossref Type - Abstracts</h1>
+                </div>
+                <div class="rightside">
+                    <iframe data-src="output_files/abstracts_by_cr_type.html"></iframe>
+                </div>
         </section>
         <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Publisher percent of OA publishing in chemistry by institution</h1>
-            </div>
-            <div class="rightside">
-                <iframe data-src="precipy/institutions_scatter_pc_gold_chemistry.html"></iframe>
-            </div>
+                <div class="leftside">
+                    <h1>MAG Added Value by Crossref Type - Citations to</h1>
+                </div>
+                <div class="rightside">
+                    <iframe data-src="output_files/citations_to_by_cr_type.html"></iframe>
+                </div>
         </section>
         <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Parallel effects at the country level</h1>
-            </div>
-            <div class="rightside">
-                <iframe data-src="precipy/countries_overtime.html"></iframe>
-            </div>
+                <div class="leftside">
+                    <h1>MAG Added Value by Crossref Type - Citations from</h1>
+                </div>
+                <div class="rightside">
+                    <iframe data-src="output_files/references_from_by_cr_type.html"></iframe>
+                </div>
+        </section>
+        <section class="twocolumn" data-background="static_assets/background-general.png">
+                <div class="leftside">
+                    <h1>MAG Added Value by Crossref Type - Subjects</h1>
+                </div>
+                <div class="rightside">
+                    <iframe data-src="output_files/subjects_by_cr_type.html"></iframe>
+                </div>
         </section>
         <section class="sectiondivider" data-background="static_assets/background-section.png">
             <h1>Conclusions</h1>
