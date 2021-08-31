@@ -31,7 +31,7 @@ class ValueAddBar(AbstractObservatoryChart):
                     'References from': 'pc_dois_with_cr_references',
                     'Subjects': 'pc_dois_with_cr_subjects'
                 },
-                'Microsoft Academic Adds': {
+                'MAG added value': {
                     'Affiliations': 'pc_dois_mag_aff_string_but_not_cr',
                     'Abstracts': 'pc_dois_with_mag_not_cr_abstract',
                     'Citations to': 'pc_dois_with_mag_not_cr_citations',
@@ -74,7 +74,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                  ):
         self.df = df
         self.metadata_element = metadata_element
-        self.categories = ['Crossref', 'Microsoft Academic Adds']
+        self.categories = ['Crossref', 'MAG added value']
         self.ys = ys
         self.stackedbar = stackedbar
         self.processed_data = False
@@ -88,7 +88,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                 'References from': 'pc_dois_with_cr_references',
                 'Subjects': 'pc_dois_with_cr_subjects'
             },
-            'Microsoft Academic Adds': {
+            'MAG added value': {
                 'Affiliations': 'pc_dois_mag_aff_string_but_not_cr',
                 'Abstracts': 'pc_dois_with_mag_not_cr_abstract',
                 'Citations to': 'pc_dois_with_mag_not_cr_citations',
