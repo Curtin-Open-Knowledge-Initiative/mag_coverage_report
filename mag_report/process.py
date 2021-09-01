@@ -292,11 +292,11 @@ def collate_value_add_values(df: pd.DataFrame,
 
 
 def alluvial_graph(af: AnalyticsFunction):
+
     cr_data = load_cache_data(af,
                               function_name=get_doi_table_data,
                               element='doi_categories',
                               filename=CR_DATA_FILENAME)
-
     cr_data_with_nulls = cr_data.replace(to_replace={'cr_type': {
         None: 'no assigned Crossref Type'
     },
@@ -336,6 +336,7 @@ def alluvial_graph(af: AnalyticsFunction):
     figdata = cr_data_with_nulls[cr_data.published_year.isin(CURRENT)].groupby(['cr_type', 'mag_type']).agg(
         num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum')
     )
+
     figdata.reset_index(inplace=True)
     figdata['cr_type'] = pd.Categorical(figdata.cr_type, categories=cr_order)
     figdata['mag_type'] = pd.Categorical(figdata.mag_type, categories=mag_order)
@@ -348,6 +349,7 @@ def alluvial_graph(af: AnalyticsFunction):
 
     plot.process_data()
     fig = plot.plotly()
+
     fig.write_image('alluvial_current.png')
     af.add_existing_file('alluvial_current.png')
     write_plotly_div(af, fig, 'alluvial_current.html')

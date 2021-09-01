@@ -50,10 +50,10 @@ class Alluvial(AbstractObservatoryChart):
 
     def process_data(self, **kwargs):
 
-        from_counts = self.df[[self.from_col_name, self.flow_values]].groupby(self.from_col_name).sum()
-        to_counts = self.df[[self.to_col_name, self.flow_values]].groupby(self.to_col_name).sum()
-        ordered_from_labels = from_counts.index.values
-        ordered_to_labels = to_counts.index.values
+        # from_counts = self.df[[self.from_col_name, self.flow_values]].groupby(self.from_col_name).sum()
+        # to_counts = self.df[[self.to_col_name, self.flow_values]].groupby(self.to_col_name).sum()
+        ordered_from_labels = self.df[self.from_col_name].unique()
+        ordered_to_labels = self.df[self.to_col_name].unique()
 
         self.node_labels = np.append(ordered_from_labels, ordered_to_labels)
 
@@ -61,7 +61,7 @@ class Alluvial(AbstractObservatoryChart):
             'source': [],
             'target': [],
             'value': [],
-            'color':'rgba(200, 200, 200, 0.25)'
+            'color': 'rgba(200, 200, 200, 0.25)'
         }
 
         for f in ordered_from_labels:
@@ -78,20 +78,31 @@ class Alluvial(AbstractObservatoryChart):
 
     def plotly(self, **kwargs):
 
-        fig = go.Figure(data=[go.Sankey(
-            node=dict(
-                pad=15,
-                thickness=20,
-                line=dict(color="black", width=0.25),
-                label=self.node_labels,
-                color='rgba(31, 119, 180, 1)'
-            ),
-            link=self.link
-        )])
+        from_length = len(self.df[self.from_col_name].unique())
+        to_length = len(self.df[self.to_col_name].unique())
+        m = 1/from_length
+        o = 1/to_length
+        fig = go.Figure(data=[
+            go.Sankey(
+                node=dict(
+                    x=[*([0.01] * from_length),
+                       *([1] * to_length)],
+                    y=[*([0.01 + n * m for n in range(0, from_length)]),
+                       *[0.01 + n * o for n in range(0, to_length)]
+                       ],
+                    pad=15,
+                    thickness=20,
+                    line=dict(color="black", width=0.25),
+                    label=self.node_labels,
+                    color='rgba(31, 119, 180, 1)'
+                ),
+                link=self.link,
+                arrangement='snap'
+            )])
 
         # Update layout
-        #fig.update_layout(template='none')
-        fig.update_layout(font=dict(family="Arial", size = 12, color = 'black'))
+        # fig.update_layout(template='none')
+        fig.update_layout(font=dict(family="Arial", size=12, color='black'))
 
         return fig
 
