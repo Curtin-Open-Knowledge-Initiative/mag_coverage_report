@@ -70,11 +70,12 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                  df: pd.DataFrame,
                  metadata_element: str,
                  ys = None,
+                 categories = ['Crossref', 'MAG added value'],
                  stackedbar = True
                  ):
         self.df = df
         self.metadata_element = metadata_element
-        self.categories = ['Crossref', 'MAG added value']
+        self.categories = categories
         self.ys = ys
         self.stackedbar = stackedbar
         self.processed_data = False

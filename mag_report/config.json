@@ -33,6 +33,12 @@
       }
     ],
     [
+      "mag_coverage_by_cr_type",
+      {
+        "depends": ["get_doi_table_data"]
+      }
+    ],
+    [
       "overall_comparison",
       {
         "depends": ["get_doi_table_data", "get_mag_table_data"]

@@ -162,9 +162,9 @@ def value_add_tables_graphs(af: AnalyticsFunction):
                             xs=['Affiliations', 'Abstracts', 'Citations to', 'References from'])
         fig = chart.plotly()
         filename = f'value_add_{time_period.lower().replace(" ", "_")}.'
-        fig.write_image(filename+'png')
-        af.add_existing_file(filename+'png')
-        write_plotly_div(af, fig, filename+'html')
+        fig.write_image(filename + 'png')
+        af.add_existing_file(filename + 'png')
+        write_plotly_div(af, fig, filename + 'html')
 
         chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
                             categories=['Crossref', 'MAG added value'],
@@ -217,9 +217,9 @@ def value_add_tables_graphs(af: AnalyticsFunction):
                                        metadata_element=metadata_element)
         fig = chart.plotly()
         filename = f'{metadata_element.replace(" ", "_").lower()}_by_cr_type.'
-        fig.write_image(filename+'png')
-        af.add_existing_file(filename+'png')
-        write_plotly_div(af, fig, filename+'html')
+        fig.write_image(filename + 'png')
+        af.add_existing_file(filename + 'png')
+        write_plotly_div(af, fig, filename + 'html')
 
     chart = ValueAddByCrossrefType(df=sum_by_type,
                                    metadata_element='Subjects',
@@ -291,8 +291,48 @@ def collate_value_add_values(df: pd.DataFrame,
     return df
 
 
-def alluvial_graph(af: AnalyticsFunction):
+def mag_coverage_by_cr_type(af: AnalyticsFunction):
+    cr_data = load_cache_data(af,
+                              function_name=get_doi_table_data,
+                              element='doi_categories',
+                              filename=CR_DATA_FILENAME)
 
+    cr_total = cr_data.groupby('cr_type').agg(
+        num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum'),
+        in_mag=pd.NamedAgg(column='dois_with_mag_id', aggfunc='sum')
+    )
+    mag_with_type = cr_data[~cr_data.mag_type.isna()].groupby('cr_type').agg(
+        mag_with_type=pd.NamedAgg(column='num_dois', aggfunc='sum')
+    )
+    mag_type_is_na = cr_data[cr_data.mag_type.isna()].groupby('cr_type').agg(
+        mag_type_is_na=pd.NamedAgg(column='num_dois', aggfunc='sum')
+    )
+
+    figdata = cr_total.join(mag_with_type).join(mag_type_is_na)
+    figdata['not_in_mag'] = figdata.num_dois - figdata.in_mag
+    # MAG Type is also na where there it is not in MAG at all
+    figdata['mag_without_type'] = figdata.mag_type_is_na - figdata.not_in_mag
+    figdata = collate_value_add_values(figdata, ['mag_with_type',
+                                                 'mag_without_type',
+                                                 'not_in_mag'])
+    figdata.reset_index(inplace=True)
+
+    chart = ValueAddByCrossrefType(df=figdata,
+                                   categories=['in MAG with Document Type',
+                                               'in MAG without Document Type',
+                                               'Not in MAG'],
+                                   metadata_element='dummy',
+                                   ys={'in MAG with Document Type': {'dummy': 'pc_mag_with_type'},
+                                       'in MAG without Document Type': {'dummy': 'pc_mag_without_type'},
+                                       'Not in MAG': {'dummy': 'pc_not_in_mag'}
+                                       })
+
+    fig = chart.plotly()
+    fig.write_image('mag_coverage_by_crossref_type.png')
+    af.add_existing_file('mag_coverage_by_crossref_type.png')
+    write_plotly_div(af, fig, 'mag_coverage_by_crossref_type.html')
+
+def alluvial_graph(af: AnalyticsFunction):
     cr_data = load_cache_data(af,
                               function_name=get_doi_table_data,
                               element='doi_categories',
@@ -354,7 +394,6 @@ def alluvial_graph(af: AnalyticsFunction):
     af.add_existing_file('alluvial_current.png')
     write_plotly_div(af, fig, 'alluvial_current.html')
 
-
 def calculate_overall_coverage(mag_data: pd.DataFrame,
                                cr_data: pd.DataFrame) -> dict:
     cr_total = cr_data.num_dois.sum()
@@ -376,7 +415,6 @@ def calculate_overall_coverage(mag_data: pd.DataFrame,
         cr_not_in_mag=cr_total - cr_in_mag,
         cr_total=cr_total
     )
-
 
 def overall_comparison(af: AnalyticsFunction):
     cr_data = load_cache_data(af,
@@ -400,7 +438,7 @@ def overall_comparison(af: AnalyticsFunction):
     figdata_all = calculate_overall_coverage(mag_sum_all, cr_sum_all)
     chart = OverallCoverage(figdata_all,
                             line_offset=0.06)
-                            #line_offset=0.08)
+    # line_offset=0.08)
     fig = chart.plotly()
     fig.write_image('overall_coverage.png')
     af.add_existing_file('overall_coverage.png')
@@ -409,7 +447,7 @@ def overall_comparison(af: AnalyticsFunction):
     figdata_2020 = calculate_overall_coverage(mag_sum_2020, cr_sum_2020)
     chart = OverallCoverage(figdata_2020,
                             line_offset=0.06)
-                            #line_offset=0.08)
+    # line_offset=0.08)
     fig = chart.plotly()
     fig.write_image('2020_coverage.png')
     af.add_existing_file('2020_coverage.png')
@@ -417,12 +455,11 @@ def overall_comparison(af: AnalyticsFunction):
     figdata_current = calculate_overall_coverage(mag_sum_current, cr_sum_current)
     chart = OverallCoverage(figdata_current,
                             line_offset=0.06)
-                            #line_offset=0.08)
+    # line_offset=0.08)
     fig = chart.plotly()
     fig.write_image('current_coverage.png')
     af.add_existing_file('current_coverage.png')
     write_plotly_div(af, fig, 'current_coverage.html')
-
 
 def mag_in_crossref_by_pubdate(af):
     cr_data = load_cache_data(af,
@@ -454,6 +491,7 @@ def mag_in_crossref_by_pubdate(af):
     fig.write_image('cr_in_mag_barline.png')
     af.add_existing_file('cr_in_mag_barline.png')
     write_plotly_div(af, fig, 'cr_in_mag_barline.html')
+
 
 def write_plotly_div(af: AnalyticsFunction,
                      figure: go.Figure,

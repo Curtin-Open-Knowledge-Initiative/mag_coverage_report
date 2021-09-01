@@ -227,6 +227,8 @@ Alluvial Current
 
 ![](cr_in_mag_barline.png)
 
+![](mag_coverage_by_crossref_type.png)
+
 MAG Value Add All Time
 
 ![](value_add_all_time.png)
