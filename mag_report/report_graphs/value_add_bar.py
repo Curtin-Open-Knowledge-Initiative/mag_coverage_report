@@ -59,8 +59,9 @@ class ValueAddBar(AbstractObservatoryChart):
 
         fig = go.Figure(data=self.figdata)
         if self.stackedbar:
-            fig.update_layout(barmode='stack', template='none')
+            fig.update_layout(barmode='stack')
         fig.update_yaxes(range=[0, 100])
+        fig.update_layout(template='none')
         return fig
 
 
@@ -127,6 +128,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
 
         fig = go.Figure(data=self.figdata)
         if self.stackedbar:
-            fig.update_layout(barmode='stack', template='none')
+            fig.update_layout(barmode='stack')
         fig.update_yaxes(range=[0, 100])
+        fig.update_layout(template='none')
         return fig
