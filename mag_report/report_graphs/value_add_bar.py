@@ -13,7 +13,7 @@ class ValueAddBar(AbstractObservatoryChart):
                  categories: [List[str]],
                  xs: List[str],
                  ys: Optional[dict] = None,
-                 stackedbar = True
+                 stackedbar=True
                  ):
         self.df = df
         self.xs = xs
@@ -70,9 +70,9 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
     def __init__(self,
                  df: pd.DataFrame,
                  metadata_element: str,
-                 ys = None,
-                 categories = ['Crossref', 'MAG added value'],
-                 stackedbar = True
+                 ys=None,
+                 categories=['Crossref', 'MAG added value'],
+                 stackedbar=True
                  ):
         self.df = df
         self.metadata_element = metadata_element
@@ -83,24 +83,29 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
 
         if not self.ys:
             self.ys = {
-            'Crossref': {
-                'Affiliations': 'pc_dois_with_cr_affiliation_strings',
-                'Abstracts': 'pc_dois_with_cr_abstract',
-                'Citations to': 'pc_dois_with_cr_citations',
-                'References from': 'pc_dois_with_cr_references',
-                'Subjects': 'pc_dois_with_cr_subjects'
-            },
-            'MAG added value': {
-                'Affiliations': 'pc_dois_mag_aff_string_but_not_cr',
-                'Abstracts': 'pc_dois_with_mag_not_cr_abstract',
-                'Citations to': 'pc_dois_with_mag_not_cr_citations',
-                'References from': 'pc_dois_with_mag_not_cr_references',
-                'Subjects': 'pc_dois_with_mag_field0'
-            }
+                'Crossref': {
+                    'Affiliations': 'pc_dois_with_cr_affiliation_strings',
+                    'Abstracts': 'pc_dois_with_cr_abstract',
+                    'Citations to': 'pc_dois_with_cr_citations',
+                    'References from': 'pc_dois_with_cr_references',
+                    'Subjects': 'pc_dois_with_cr_subjects'
+                },
+                'MAG added value': {
+                    'Affiliations': 'pc_dois_mag_aff_string_but_not_cr',
+                    'Abstracts': 'pc_dois_with_mag_not_cr_abstract',
+                    'Citations to': 'pc_dois_with_mag_not_cr_citations',
+                    'References from': 'pc_dois_with_mag_not_cr_references',
+                    'Subjects': 'pc_dois_with_mag_field0'
+                }
             }
 
-    def process_data(self):
+    def process_data(self,
+                     **kwargs):
 
+        palette = kwargs.get('palette')
+        if palette:
+            [self.ys[category].update({'marker_color': palette[i]}) for i, category
+                             in enumerate(self.ys.keys())]
         cr_types = ['journal-article',
                     'proceedings',
                     'book-chapter',
@@ -113,7 +118,8 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                    x=cr_types,
                    y=[self.df[self.df.cr_type == t][
                           self.ys.get(category).get(self.metadata_element)].values[0]
-                      for t in cr_types])
+                      for t in cr_types],
+                   marker_color=self.ys.get(category).get('marker_color'))
             for category in self.categories
         ]
         self.processed_data = True
@@ -124,7 +130,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
     def plotly(self,
                **kwargs):
         if not self.processed_data:
-            self.process_data()
+            self.process_data(**kwargs)
 
         fig = go.Figure(data=self.figdata)
         if self.stackedbar:

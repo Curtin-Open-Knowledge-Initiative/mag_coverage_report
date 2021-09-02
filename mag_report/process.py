@@ -325,9 +325,11 @@ def mag_coverage_by_cr_type(af: AnalyticsFunction):
                                    ys={'in MAG with Document Type': {'dummy': 'pc_mag_with_type'},
                                        'in MAG without Document Type': {'dummy': 'pc_mag_without_type'},
                                        'Not in MAG': {'dummy': 'pc_not_in_mag'}
-                                       })
+                                       }
+                                   )
 
-    fig = chart.plotly()
+    # Modify the bar colors here
+    fig = chart.plotly(palette=['#1F77B4', '#FF7F0E', '#D62728'])
     fig.write_image('mag_coverage_by_crossref_type.png')
     af.add_existing_file('mag_coverage_by_crossref_type.png')
     write_plotly_div(af, fig, 'mag_coverage_by_crossref_type.html')
