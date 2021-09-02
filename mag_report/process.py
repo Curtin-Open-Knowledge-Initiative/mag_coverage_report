@@ -29,7 +29,7 @@ from report_data_processing.sql import (
     doi_table_categories_query, mag_table_categories_query
 )
 from report_graphs import (
-    Alluvial, OverallCoverage, BarLine, ValueAddBar, ValueAddByCrossrefType
+    Alluvial, OverallCoverage, BarLine, ValueAddBar, ValueAddByCrossrefType, ValueAddByCrossrefTypeHorizontal
 )
 
 PROJECT_ID = 'utrecht-university'
@@ -317,7 +317,7 @@ def mag_coverage_by_cr_type(af: AnalyticsFunction):
                                                  'not_in_mag'])
     figdata.reset_index(inplace=True)
 
-    chart = ValueAddByCrossrefType(df=figdata,
+    chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
                                    categories=['in MAG with Document Type',
                                                'in MAG without Document Type',
                                                'Not in MAG'],
