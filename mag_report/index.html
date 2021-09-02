@@ -14,7 +14,7 @@
             <section class="titleslide" data-background="static_assets/background-title.png">
                 <div vertical-align="middle">
                     <h1>What do we lose when MAG goes away?</h1>
-                    <h2>What we have, what we need,<br> and how to preserve it ##or: maintain it?##</h2>
+                    <h2>What we have, what we need,<br>and how to maintain it?</h2>
                 </div>
             </section>
             <section class="twocolumn" data-background="static_assets/background-general.png">
@@ -56,7 +56,7 @@ io/presentation-acs2021/">https://curtin-open-knowledge-initiative.github.io/pre
             <div class="rightside">
                 <ul>
                     <li>
-                        Microsoft made the data available under an ##mostly## open license which offers
+                        Microsoft made the data available under an open (ODC-By) license which offers
                         opportunities to develop new tools and resources, particularly based
                         on machine learning approaches.
                     </li>
@@ -74,13 +74,19 @@ io/presentation-acs2021/">https://curtin-open-knowledge-initiative.github.io/pre
                         want to reach beyond the core of the academic record (e.g. beyond DOIs)
                     </li>
                     <li>
-                        Structured metadata resources are also moving forward in leaps and bounds
-                        offering a complementary route to addressing data requirements.
-                        ## make explicit what it's complementary to? (and later address full text/metadata/sources issue?##
+                        Efforts to replace MAG largely focus on inferring or scraping metadata and
+                        are therefore dependent on access to semi-structured metadata or full text
                     </li>
                     <li>
-                        ##A replacement should demonstrate commitment to the Principles of Open Scholarly Infrastructure (POSI)
-                        to ensure transparency, community governance and an insurance plan for continued availability [rephrase]"
+                        Structured metadata resources are also moving forward in leaps and bounds.
+                        Increasing the upstream provision of structured metadata (i.e. by publishers)
+                        is a complementary strategy route towards a rich open metadata environment
+                    </li>
+                    <li>
+                        We believe services seeking to replace MAG should demonstrate commitment to
+                        the Principles of Open Scholarly Infrastructure (POSI)
+                        to ensure transparency, community governance and an insurance plan for long term
+                        availability
                     </li>
 
                 </ul>
@@ -93,11 +99,11 @@ io/presentation-acs2021/">https://curtin-open-knowledge-initiative.github.io/pre
             <h1>...how would we know?</h1>
         </section>
         <section class="bigblacktext" data-background="static_assets/background-general.png">
-            <h1>...and what do we have ##(and don't have)##?</h1>
+            <h1>...and what content can we (or can't we) use ?</h1>
         </section>
         <section class="sectiondivider" data-background="static_assets/background-section.png">
             <h1>A quick segue on the data</h1>
-            <h2>The Curtin Open Knowledge Initiative - this section needs updating</h2>
+            <h2>The Curtin Open Knowledge Initiative</h2>
         </section>
         <section class="pullquoteorange" data-background="static_assets/background-title.png">
             <p>
@@ -123,24 +129,25 @@ io/presentation-acs2021/">https://curtin-open-knowledge-initiative.github.io/pre
                     <ul>
                         <li>Crossref - weekly dump via Metadata Plus program</li>
                         <li>Unpaywall - Open Access Status data via open data dump (October 2020)</li>
-                        <li>Microsoft Academic - Affiliation and authorship data via biweekly dump</li>
+                        <li><em>Microsoft Academic - Affiliation and authorship data via biweekly dump</em></li>
                         <li>GRID - Information on organisations via regular data dump</li>
                     </ul>
-                    <p>Data is integrated and processed via Observatory Platform, an open source workflow system
-                    developed within COKI to integrate data related to scholarly communications. The
-                        <a href="https://github.com/The-Academic-Observatory/observatory-platform">code is
-                    available on Github</a> including the template for
-                        <a href="https://github.com/The-Academic-Observatory/observatory-platform/blob/develop/observatory-dags/observatory/dags/database/sql/aggregate_unpaywall.sql.jinja2">
-                            SQL queries which generates the OA
-                            status</a> we use from the Unpaywall data. More detail on the OA categories is also
-                    provided on the slide below.</p>
-                    <p>For this analysis, publisher is defined by the text string in the Crossref metadata,
-                    affiliation is derived from the assignment by Microsoft Academic and field is the
-                        <a href="https://academic.microsoft.com/topics/185592680">Level Zero
-                            field "Chemistry" from Microsoft Academic</a> as provided in the data dump used. Some
-                    comparative data for "<a href="https://academic.microsoft.com/topics/192562407">Materials
-                            Science</a>" and "<a href="https://academic.microsoft.com/topics/86803240">Biology</a>"
-                        is presented in additional slides.</p>
+                    <p>
+                        Data is integrated and processed via Observatory Platform, an open source workflow
+                        system developed within COKI to integrate data related to scholarly communications.
+                        The <a href="https://github.com/The-Academic-Observatory/observatory-platform">code
+                        is available on Github</a>
+                    </p>
+                    <p>
+                        For this analysis we largely use the "DOI Table" which is an aggregation of
+                        multiple data sources that provide information on the outputs identified by
+                        Crossref DOIs. To supplement this we use a de-normalised version of the MAG
+                        database.
+                    </p>
+                    <p>
+                        Code for the analysis, including the queries and processing and a local copy
+                        of the derived data are available at the presentation Github repository.
+                    </p>
                 </div>
             </section>
         </section>
@@ -155,6 +162,9 @@ com/embed/reporting/0b057fb6-5e07-4643-92b5-6a25138fce6d/page/Bq6OB" frameborder
                     <a href="http://openknowledge.community/dashboards/">http://openknowledge.community/dashboards/</a>
                 </div>
             </div>
+        </section>
+        <section class="bigblacktext" data-background="static_assets/background-general.png">
+            <h1>...but because we focus on provenance and transparency, it's also good for...</h1>
         </section>
         <section class="sectiondivider" data-background="static_assets/background-section.png">
             <h1>Comparing MAG with Crossref Metadata</h1>
@@ -179,9 +189,9 @@ com/embed/reporting/0b057fb6-5e07-4643-92b5-6a25138fce6d/page/Bq6OB" frameborder
                                 <li>Subjects</li>
                             </ul>
                         </li>
-                        <li>Split by publication type, year of publication, ##discipline##</li>
+                        <li>Split by publication type, year of publication</li>
                         <li>Across all time and for Crossref "current" (2019-21)</li>
-                        <li>This analysis on data snapshots from 18 July 2021 ##check/confirm##</li>
+                        <li>This analysis on data snapshots from 18 July 2021</li>
                     </ul>
                 </div>
         </section>
@@ -293,13 +303,9 @@ com/embed/reporting/0b057fb6-5e07-4643-92b5-6a25138fce6d/page/Bq6OB" frameborder
         <section class="sectiondivider" data-background="static_assets/background-section.png">
             <h1>Case studies</h1>
         </section>
-        <section class="twocolumn" data-background="static_assets/background-general.png">
-                <div class="leftside">
-                    <h1>References in Crossref - added value MAG (by publisher)</h1>
-                </div>
-                <div class="rightside">
-                    <img src="static_assets/open_citations_bubble.png"></img>
-                </div>
+        <section data-background="static_assets/background-general.png">
+            <h1>References in Crossref - added value MAG (by publisher)</h1>
+            <img src="static_assets/open_citations_bubble.png"></img>
         </section>
         <section class="twocolumn" data-background="static_assets/background-general.png">
                 <div class="leftside">
@@ -357,7 +363,7 @@ com/embed/reporting/0b057fb6-5e07-4643-92b5-6a25138fce6d/page/Bq6OB" frameborder
                         <p>What is the role of metadata provision vs extraction of full-text?</p>
                     </li>
                     <li>
-                        <p>What additional source providers of authoratative [sp?] metadata beyond publishers are there, and how can this be harnessed? </p>
+                        <p>What additional source providers of authoritative metadata beyond publishers are there, and how can this be harnessed? </p>
                     </li>
                     <li>
                         <p>What is needed to safeguard transparent data collection, provenance and sustainability? </p>
@@ -379,28 +385,43 @@ com/embed/reporting/0b057fb6-5e07-4643-92b5-6a25138fce6d/page/Bq6OB" frameborder
             <div class="rightside">
                 <ul>
                     <li>
-                        <p>...</p>
+                        <p>
+                            MAG was a great resource, and its openness will enable us to build back better
+                        </p>
                     </li>
                     <li>
-                        <p>...</p>
+                        <p>
+                            There are challenges in systematically gaining access to underlying information
+                            to replicate some aspects of MAG (eg subject classifications)
+                        </p>
                     </li>
                     <li>
-                        <p>...</p>
+                        <p>
+                            Improvements to the provision of structured metadata by publishers (ROR, ORCID,
+                            I4OC, I4OA etc) have a great potential to improve metadata coverage
+                        </p>
                     </li>
                     <li>
-                        <p>...</p>
+                        <p>
+                            But gaps will still need to be filled (and back-filled). Access to content,
+                            including abstracts and ideally full-text is critical to make this happen beyond
+                            the low hanging fruit
+                        </p>
                     </li>
                     <li>
-                        <p>..</p>
+                        <p>
+                            There are big gaps and under-represented areas, including content beyond journal
+                            articles and smaller (and often non-APC open access) journals
+                        </p>
                     </li>
                 </ul>
             </div>
         </section>
         <section class="bigblacktext" data-background="static_assets/background-general.png">
-            <h1>Oneliner conclusion...</h1>
+            <h1>Tackle the problem from both ends...</h1>
         </section>
         <section class="bigblacktext" data-background="static_assets/background-general.png">
-            <h1>...end of oneliner conclusion</h1>
+            <h1>...meet in the middle for a rich metadata future</h1>
         </section>
         <section class="twocolumn" data-background="static_assets/background-general.png">
             <div class="leftside">
@@ -452,84 +473,6 @@ com/embed/reporting/0b057fb6-5e07-4643-92b5-6a25138fce6d/page/Bq6OB" frameborder
                     <li>View the public dashboards</li>
                 </ul>
             </h2>
-        </section>
-        <section class="sectiondivider" data-background="static_assets/background-section.png">
-            <h1>Notes and further information</h1>
-        </section>
-        <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Notes</h1>
-            </div>
-            <div class="rightside">
-                <p>Publisher percentage of chemistry is calculated based on the total count of publications
-                assigned in Microsoft Academic to the Level 0 field of "chemistry" as the denominator with the
-                total count of publications in Crossref where the publisher name field corresponds to the most
-                common variant of the publisher name (<em>Royal Society of Chemistry (RSC)</em> and
-                <em>American Chemical Society (ACS)</em> respectively).</p>
-                <p>Strictly these are not percentages and could in theory go to greater than 100%. They are
-                also sensitive in magnitude to changes in the Microsoft field assignment. However it is a like
-                for like comparison across the two publishers.</p>
-                <p>An analysis by journal would also be interesting but currently the metadata for journal
-                identification is less reliable with journal names and choice of ISSN provided in Crossref
-                metadata changing from year to year for both publishers. Future analysis deploying ISSN-L
-                could address this.</p>
-            </div>
-        </section>
-        <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Publisher Count by year</h1>
-            </div>
-            <div class="rightside">
-                <iframe data-src="precipy/countries_count_overtime.html"></iframe>
-            </div>
-        </section>
-        <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Publisher % Green by year</h1>
-            </div>
-            <div class="rightside">
-                <iframe data-src="precipy/countries_pc_green_overtime.html"></iframe>
-            </div>
-        </section>
-        <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Chemistry Count by year</h1>
-            </div>
-            <div class="rightside">
-                <iframe data-src="precipy/countries_count_chem_overtime.html"></iframe>
-            </div>
-        </section>
-        <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Publishers % of Materials Field</h1>
-            </div>
-            <div class="rightside">
-                <iframe data-src="precipy/countries_materials_overtime.html"></iframe>
-            </div>
-        </section>
-        <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Publishers % of Biology Field</h1>
-            </div>
-            <div class="rightside">
-                <iframe data-src="precipy/countries_biology_overtime.html"></iframe>
-            </div>
-        </section>
-        <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Publisher percent of Materials Science by institution</h1>
-            </div>
-            <div class="rightside">
-                <iframe data-src="precipy/institutions_scatter_pc_materials.html"></iframe>
-            </div>
-        </section>
-        <section class="twocolumn" data-background="static_assets/background-general.png">
-            <div class="leftside">
-                <h1>Publisher percent of Biology by institution</h1>
-            </div>
-            <div class="rightside">
-                <iframe data-src="precipy/institutions_scatter_pc_biology.html"></iframe>
-            </div>
         </section>
     </div>
 </div>
