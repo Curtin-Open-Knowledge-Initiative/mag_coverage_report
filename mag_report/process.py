@@ -29,7 +29,7 @@ from report_data_processing.sql import (
     doi_table_categories_query, mag_table_categories_query
 )
 from report_graphs import (
-    Alluvial, OverallCoverage, BarLine, ValueAddBar, ValueAddByCrossrefType
+    Alluvial, OverallCoverage, BarLine, ValueAddBar, ValueAddByCrossrefType, ValueAddByCrossrefTypeHorizontal
 )
 
 PROJECT_ID = 'utrecht-university'
@@ -317,7 +317,7 @@ def mag_coverage_by_cr_type(af: AnalyticsFunction):
                                                  'not_in_mag'])
     figdata.reset_index(inplace=True)
 
-    chart = ValueAddByCrossrefType(df=figdata,
+    chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
                                    categories=['in MAG with Document Type',
                                                'in MAG without Document Type',
                                                'Not in MAG'],
@@ -329,7 +329,7 @@ def mag_coverage_by_cr_type(af: AnalyticsFunction):
                                    )
 
     # Modify the bar colors here
-    fig = chart.plotly(palette=['#1F77B4', '#FF7F0E', '#D62728'])
+    fig = chart.plotly(palette=['#F6671E', '#FAA77C', '#CCCCCC'])
     fig.write_image('mag_coverage_by_crossref_type.png')
     af.add_existing_file('mag_coverage_by_crossref_type.png')
     write_plotly_div(af, fig, 'mag_coverage_by_crossref_type.html')
