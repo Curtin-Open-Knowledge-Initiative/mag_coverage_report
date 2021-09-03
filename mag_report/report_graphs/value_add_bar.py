@@ -102,7 +102,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
     def process_data(self):
 
         cr_types = ['journal-article',
-                    'proceedings',
+                    'proceedings-article',
                     'book-chapter',
                     'book',
                     'posted-content',
@@ -175,7 +175,7 @@ class ValueAddByCrossrefTypeHorizontal(AbstractObservatoryChart):
             [self.ys[category].update({'marker_color': palette[i]}) for i, category
                              in enumerate(self.ys.keys())]
         cr_types = ['journal-article',
-                    'proceedings',
+                    'proceedings-article',
                     'book-chapter',
                     'book',
                     'posted-content',
